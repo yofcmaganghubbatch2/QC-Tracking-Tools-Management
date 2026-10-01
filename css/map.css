@@ -1,7 +1,9 @@
 /* peta */
 .mapbox{margin-top:0;padding:6px}
 .mapbox svg{display:block;width:100%;height:auto}
-.land{fill:url(#dots);stroke:var(--mute);stroke-opacity:.45;stroke-width:1;stroke-linejoin:round}
+.land{fill:url(#dots);stroke:var(--mute);stroke-opacity:.5;stroke-width:1.2;stroke-linejoin:round}
+.eq{stroke:var(--line);stroke-width:1;stroke-dasharray:4 6}
+.eqt{font-size:10px;fill:var(--mute);opacity:.8}
 .arc{fill:none;stroke:var(--teal);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s ease-out forwards;animation-delay:calc(var(--i)*.45s + 1.2s)}
 .ring{opacity:.4;transform-box:fill-box;transform-origin:center;animation:ping 2.2s ease-out infinite}
 @keyframes ping{to{transform:scale(2.8);opacity:0}}

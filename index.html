@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tracking QC Measurement Tools</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📡%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link rel="stylesheet" href="css/tokens.css">
@@ -21,23 +22,25 @@
 <div class="wrap">
 <header class="hero">
   <h1>Tracking QC Measurement Tools</h1>
-  <p>Ultrasonic thickness gauge jumlahnya terbatas. Lihat sekarang alatnya di tangan siapa, sudah berapa hari, dan lewat siapa saja ia berpindah.</p>
+  <p><b>Kelola dan pantau Ultrasonic Thickness Gauge dengan lebih mudah</b><br>
+status alat, pengguna saat ini, durasi pemakaian, dan riwayat perpindahannya secara terpusat.
+</p>
   <div class="scope" aria-hidden="true">
     <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
       <g class="grid"><line x1="0" x2="1000" y1="75" y2="75"/><line x1="0" x2="1000" y1="25" y2="25"/><line x1="0" x2="1000" y1="125" y2="125"/>
       <line x1="200" x2="200" y1="0" y2="150"/><line x1="400" x2="400" y1="0" y2="150"/><line x1="600" x2="600" y1="0" y2="150"/><line x1="800" x2="800" y1="0" y2="150"/></g>
       <path class="wave" d="M0 75 L90 75 L100 20 L112 128 L124 48 L136 92 L150 75 L300 75 L312 40 L322 112 L334 62 L346 80 L360 75 L520 75 L530 55 L538 100 L548 68 L558 75 L720 75 L728 64 L734 88 L742 72 L750 75 L1000 75"/>
     </svg>
-    <div class="sweep"></div><span class="tag">gema tebal material</span>
+    <div class="sweep"></div><span class="tag">Thick Material Echo</span>
   </div>
   <div class="stats" id="stats"></div>
 </header>
 
 <div class="notice" id="notice" role="status" hidden></div>
 
-<div class="bar" style="margin-top:34px"><h2>Peta perjalanan</h2>
+<div class="bar" style="margin-top:34px"><h2>Tools Journey Maps</h2>
   <span style="color:var(--mute);font-size:.9rem"><i class="dt" style="background:var(--teal);margin-left:0"></i>di PIC<i class="dt" style="background:var(--amber)"></i>dikirim<i class="dt" style="background:var(--red)"></i>rusak</span>
-  <select id="snsel" aria-label="Filter nomor seri"><option value="">Semua alat</option></select></div>
+  <select id="snsel" aria-label="Filter nomor seri"><option value="">All Tools</option></select></div>
 <div class="mapwrap"><div class="scope mapbox" id="map"></div><div id="tip" hidden></div></div>
 
 <div class="bar">

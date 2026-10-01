@@ -1,4 +1,4 @@
-# Tracking QC Measurement Tools (v1.1)
+# Tracking QC Measurement Tools (v1.2)
 
 Dashboard pelacak alat ukur QC: posisi alat sekarang, PIC, lama di PIC, peta rute, dan log serah terima.
 Versi ini memakai data contoh (`js/data/sample.json`) atau file xlsx yang dimuat user lewat tombol "Muat spreadsheet".
@@ -30,7 +30,7 @@ Sumber data mana pun harus mengembalikan array catatan seperti `js/data/sample.j
 `role` bernilai `s` (pengirim) atau `r` (penerima). `cond` bernilai `good` atau `broken`.
 
 ## Menambah kota di peta
-Edit `js/config/cities.js` (format `nama:[longitude,latitude]`, huruf kecil). Data contoh sengaja memuat kota Jambi yang belum ada di daftar, jadi 1 alat belum tampil di peta dan ada catatan di bawah peta. Coba tambahkan `jambi:[103.61,-1.61]` lalu muat ulang.
+Edit `js/config/cities.js` (format `nama:[longitude,latitude]`, huruf kecil). Nama di spreadsheet dicocokkan otomatis, jadi "Kota Bandung" tetap kena "bandung". Kalau ada kota yang belum terdaftar, catatan di bawah peta menyebut nama kotanya. Bentuk pulau ada di `js/config/land.js`.
 
 ## Rencana hari ke-2 (sambung ke spreadsheet)
 1. Buat service account Google, aktifkan Sheets API, share sheet ke emailnya (viewer saja).
