@@ -1,0 +1,2 @@
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}
+.row{grid-template-columns:1fr 1fr;gap:4px 12px}.row.head{display:none}}

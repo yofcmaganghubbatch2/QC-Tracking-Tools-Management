@@ -1,0 +1,22 @@
+[
+  {"d": "2026-09-28", "email": "blablabla@example.com", "name": "Abu Jahal", "id": 120001, "loc": "Bandung", "role": "s", "sn": "1234555", "cond": "good", "rem": "", "ship": "shopeexpress", "trk": "987655"},
+  {"d": "2026-09-30", "email": "sukasuka@example.com", "name": "Abu Lahab", "id": 120002, "loc": "Sidoarjo", "role": "r", "sn": "1234555", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-10-02", "email": "tastas@example.com", "name": "Leon", "id": 120003, "loc": "Kediri", "role": "s", "sn": "1234557", "cond": "good", "rem": "", "ship": "shopeexpress", "trk": "987659"},
+  {"d": "2026-10-05", "email": "apapa@example.com", "name": "Hazle", "id": 120004, "loc": "Lampung", "role": "r", "sn": "1234557", "cond": "broken", "rem": "No cable", "ship": "", "trk": ""},
+  {"d": "2026-10-12", "email": "budi.s@example.com", "name": "Budi Santoso", "id": 120007, "loc": "Balikpapan", "role": "s", "sn": "1234562", "cond": "good", "rem": "", "ship": "sicepat", "trk": "551201"},
+  {"d": "2026-10-15", "email": "andi.p@example.com", "name": "Andi Pratama", "id": 120009, "loc": "Makassar", "role": "r", "sn": "1234562", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-10-20", "email": "siti.rahma@example.com", "name": "Siti Rahma", "id": 120006, "loc": "Medan", "role": "s", "sn": "1234564", "cond": "good", "rem": "", "ship": "jne", "trk": "990088"},
+  {"d": "2026-10-24", "email": "made.w@example.com", "name": "Made Wirawan", "id": 120008, "loc": "Denpasar", "role": "r", "sn": "1234564", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-11-02", "email": "andi.p@example.com", "name": "Andi Pratama", "id": 120009, "loc": "Makassar", "role": "s", "sn": "1234565", "cond": "good", "rem": "", "ship": "jne", "trk": "990150"},
+  {"d": "2026-11-06", "email": "made.w@example.com", "name": "Made Wirawan", "id": 120008, "loc": "Denpasar", "role": "r", "sn": "1234565", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-11-10", "email": "sukasuka@example.com", "name": "Abu Lahab", "id": 120002, "loc": "Sidoarjo", "role": "s", "sn": "1234555", "cond": "good", "rem": "", "ship": "jne", "trk": "990101"},
+  {"d": "2026-11-14", "email": "siti.rahma@example.com", "name": "Siti Rahma", "id": 120006, "loc": "Medan", "role": "r", "sn": "1234555", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-11-20", "email": "yayaya@example.com", "name": "Lucas", "id": 120005, "loc": "Jakarta", "role": "s", "sn": "1234563", "cond": "good", "rem": "", "ship": "jne", "trk": "990205"},
+  {"d": "2026-11-23", "email": "dewi.l@example.com", "name": "Dewi Lestari", "id": 120011, "loc": "Batam", "role": "r", "sn": "1234563", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-11-25", "email": "siti.rahma@example.com", "name": "Siti Rahma", "id": 120006, "loc": "Medan", "role": "s", "sn": "1234566", "cond": "good", "rem": "", "ship": "jne", "trk": "990300"},
+  {"d": "2026-11-28", "email": "rina.w@example.com", "name": "Rina Wulandari", "id": 120010, "loc": "Jambi", "role": "r", "sn": "1234566", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-12-01", "email": "sukasuka@example.com", "name": "Abu Lahab", "id": 120002, "loc": "Sidoarjo", "role": "s", "sn": "1234560", "cond": "good", "rem": "", "ship": "shopeexpress", "trk": "987663"},
+  {"d": "2026-12-03", "email": "yayaya@example.com", "name": "Lucas", "id": 120005, "loc": "Jakarta", "role": "r", "sn": "1234560", "cond": "good", "rem": "", "ship": "", "trk": ""},
+  {"d": "2026-12-04", "email": "dewi.l@example.com", "name": "Dewi Lestari", "id": 120011, "loc": "Batam", "role": "s", "sn": "1234563", "cond": "good", "rem": "", "ship": "jnt", "trk": "880412"},
+  {"d": "2026-12-05", "email": "tastas@example.com", "name": "Leon", "id": 120003, "loc": "Kediri", "role": "s", "sn": "1234561", "cond": "good", "rem": "", "ship": "shopeexpress", "trk": "987671"}
+]

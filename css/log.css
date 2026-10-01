@@ -1,0 +1,11 @@
+/* log */
+.log{background:var(--panel);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.row{display:grid;grid-template-columns:98px 1.4fr 1fr 110px 1.2fr;gap:12px;padding:13px 20px;border-top:1px solid var(--line);align-items:center;font-size:.93rem}
+.row:first-child{border-top:0}
+.row.head{color:var(--mute);font-size:.85rem;font-weight:700}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.82rem}
+.chip.s{background:color-mix(in srgb,var(--amber) 25%,transparent);color:var(--amber-ink)}
+.chip.r{background:color-mix(in srgb,var(--teal) 16%,transparent);color:var(--teal)}
+.row small{color:var(--mute);display:block}
+.empty{padding:34px;text-align:center;color:var(--mute)}
+footer{margin-top:26px;color:var(--mute);font-size:.88rem}

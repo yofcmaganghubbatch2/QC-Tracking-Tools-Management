@@ -1,0 +1,5 @@
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,sans-serif;line-height:1.5}
+h1,h2,.serial,.big{font-family:"Bricolage Grotesque",Figtree,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px 60px}

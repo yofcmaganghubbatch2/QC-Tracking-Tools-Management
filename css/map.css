@@ -1,0 +1,30 @@
+/* peta */
+.mapbox{margin-top:0;padding:6px}
+.mapbox svg{display:block;width:100%;height:auto}
+.land{fill:url(#dots);stroke:var(--mute);stroke-opacity:.45;stroke-width:1;stroke-linejoin:round}
+.arc{fill:none;stroke:var(--teal);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s ease-out forwards;animation-delay:calc(var(--i)*.45s + 1.2s)}
+.ring{opacity:.4;transform-box:fill-box;transform-origin:center;animation:ping 2.2s ease-out infinite}
+@keyframes ping{to{transform:scale(2.8);opacity:0}}
+.mk text{font-size:11px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:3px}
+.cy{font-size:10px;fill:var(--mute);paint-order:stroke;stroke:var(--panel);stroke-width:3px}
+.mapbox .dim{opacity:0;pointer-events:none}
+.mapbox [data-sns]{transition:opacity .3s}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.chips .btn[aria-pressed=true]{background:var(--teal);color:var(--bg);border-color:var(--teal)}
+.chips small{color:var(--mute);margin-left:auto}
+.dt{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 4px 0 10px;vertical-align:-1px}
+.card{cursor:pointer}.card.sel{box-shadow:0 0 0 3px var(--teal)}.card.off{display:none}
+.mapwrap{position:relative}
+.mk{cursor:pointer}.mk:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.mk .cnt{font-size:9px;fill:var(--bg);stroke:none;text-anchor:middle}
+.endn{opacity:0;animation:fadein .5s ease forwards;animation-delay:calc(var(--i)*.45s + 2.4s)}
+@keyframes fadein{to{opacity:1}}
+.mn{margin:6px 12px 8px;color:var(--mute);font-size:.85rem}
+select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;max-width:100%}
+#tip{position:absolute;z-index:5;width:230px;transform:translate(-50%,calc(-100% - 16px));background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:.86rem;line-height:1.35;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.22);animation:fadein .18s ease both}
+#tip.below{transform:translate(-50%,16px)}
+#tip[hidden]{display:none}
+#tip b{font-size:1rem;display:block}#tip small{display:block;color:var(--mute)}
+#tip p{margin:8px 0 0}#tip p.go{color:var(--amber-ink)}
+#tip ul{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:1px solid var(--line)}
+#tip li+li{margin-top:6px}#tip .bad{color:var(--red);font-weight:500}
