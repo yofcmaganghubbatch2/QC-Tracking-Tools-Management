@@ -3,7 +3,7 @@ import {state} from "../state.js";
 import {esc} from "../logic/format.js";
 import {renderLog} from "./log.js";
 
-export function fillSel(g){const s=$("#snsel");s.innerHTML=`<option value="">Semua alat</option>`+g.map(([sn])=>`<option>${esc(sn)}</option>`).join("");if(!g.some(([sn])=>sn==state.sel))state.sel=null;s.value=state.sel||""}
+export function fillSel(g){const s=$("#snsel");s.innerHTML=`<option value="">All tools</option>`+g.map(([sn])=>`<option>${esc(sn)}</option>`).join("");if(!g.some(([sn])=>sn==state.sel))state.sel=null;s.value=state.sel||""}
 
 export function applySel(){const sel=state.sel;
   $$(".mapbox [data-sns]").forEach(e=>e.classList.toggle("dim",!!sel&&!e.dataset.sns.split(" ").includes(sel)));

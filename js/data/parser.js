@@ -1,11 +1,28 @@
 import {COLUMNS,REQUIRED} from "../config/schema.js";
 import {iso,DAY} from "../logic/format.js";
 
-const toIso=v=>v instanceof Date?iso(v):typeof v=="number"?iso(new Date(Math.round((v-25569)*DAY)+ (new Date().getTimezoneOffset()*6e4))):String(v||"").slice(0,10);
+// Nilai tanggal dari spreadsheet -> "YYYY-MM-DD". Mendukung serial number, objek Date, dan teks.
+export function toIso(v){
+  if(v instanceof Date)return iso(v);
+  if(typeof v=="number")return iso(new Date(Math.round((v-25569)*DAY)+new Date().getTimezoneOffset()*6e4));
+  const s=String(v||"").trim();
+  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
+  // Teks tanggal angka dibaca day-first: 05/10/2026 = 5 Oktober (format date picker Google Form kita). Tidak pernah ditebak month-first.
+  const m=s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/);
+  if(m){
+    const dd=+m[1],mm=+m[2],yy=+m[3],chk=new Date(Date.UTC(yy,mm-1,dd));
+    return chk.getUTCFullYear()===yy&&chk.getUTCMonth()===mm-1&&chk.getUTCDate()===dd?`${yy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`:"";
+  }
+  if(!/[a-z]/i.test(s))return ""; // angka lain yang ambigu: lewati dan laporkan sebagai skipped
+  const t=Date.parse(s);
+  return Number.isNaN(t)?"":iso(new Date(t));
+}
+
 const get=(o,f)=>{for(const p of COLUMNS[f]){const k=Object.keys(o).find(x=>x.toLowerCase().startsWith(p));if(k&&o[k]!==""&&o[k]!=null)return o[k]}};
 
-export function missingColumns(rows){
-  const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))].map(k=>k.toLowerCase());
+// Kolom wajib yang tidak ditemukan. Beri `headers` kalau tersedia (berguna saat sheet masih kosong).
+export function missingColumns(rows,headers){
+  const keys=(headers||[...new Set(rows.flatMap(r=>Object.keys(r)))]).map(k=>String(k).toLowerCase());
   return REQUIRED.filter(f=>!COLUMNS[f].some(p=>keys.some(k=>k.startsWith(p))));
 }
 
@@ -14,17 +31,4 @@ export function parseRows(rows){
     role:/^s/i.test(String(get(o,"role")||""))?"s":"r",sn:String(get(o,"sn")||""),
     cond:/broken|rusak/i.test(String(get(o,"cond")||""))?"broken":"good",
     rem:String(get(o,"rem")||""),ship:String(get(o,"ship")||""),trk:String(get(o,"trk")||"")})).filter(r=>r.sn&&r.d);
-}
-
-// Baca file xlsx/csv di browser (memakai library XLSX dari CDN di index.html).
-export async function readSpreadsheet(file){
-  if(typeof XLSX==="undefined")throw new Error("Library pembaca xlsx belum termuat. Cek koneksi internet lalu muat ulang halaman.");
-  const wb=XLSX.read(await file.arrayBuffer(),{cellDates:true});
-  const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-  if(!rows.length)throw new Error("Sheet pertama kosong.");
-  const miss=missingColumns(rows);
-  if(miss.length)throw new Error("Kolom wajib tidak ditemukan: "+miss.map(f=>COLUMNS[f][0]).join(", "));
-  const data=parseRows(rows);
-  if(!data.length)throw new Error("Tidak ada baris valid (cek nomor seri dan tanggal).");
-  return data;
 }

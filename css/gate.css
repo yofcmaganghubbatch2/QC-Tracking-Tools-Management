@@ -1,0 +1,7 @@
+#gate{border:1px solid var(--line);border-radius:22px;background:var(--panel);color:var(--ink);padding:26px 28px;max-width:min(92vw,380px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+#gate::backdrop{background:rgba(8,24,30,.55);backdrop-filter:blur(4px)}
+#gate h2{margin:0 0 6px;font-size:1.5rem}
+#gate p{margin:0 0 14px;color:var(--mute);font-size:.95rem}
+#gate input{width:100%;margin-bottom:12px;border-radius:14px}
+#gate .gate-err{color:var(--red);margin:-4px 0 12px}
+#gate .gate-err[hidden]{display:none}

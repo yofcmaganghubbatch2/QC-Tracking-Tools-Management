@@ -1,5 +1,5 @@
-// Pengaturan aplikasi. Ubah di sini saat pindah sumber data.
+// Pengaturan aplikasi.
 export const CONFIG={
-  source:"sample",     // "sample" = data contoh lokal; "api" = spreadsheet lewat /api/tools (hari ke-2)
+  source:"api",        // "api" = spreadsheet lewat /api/tools. "sample" = data demo lokal (atau buka alamat dengan ?demo)
   apiUrl:"/api/tools"
 };

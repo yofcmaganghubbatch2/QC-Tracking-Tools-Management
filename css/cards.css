@@ -32,3 +32,4 @@
 @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
 @keyframes popd{from{transform:rotate(45deg) scale(0)}to{transform:rotate(45deg) scale(1)}}
 @keyframes growy{to{transform:scaleY(1)}}
+.cards .empty{grid-column:1/-1;background:var(--panel);border:1px dashed var(--line);border-radius:22px;padding:34px;text-align:center;color:var(--mute)}

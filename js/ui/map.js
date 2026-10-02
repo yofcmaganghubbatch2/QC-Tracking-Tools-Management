@@ -14,9 +14,9 @@ const ARC_LEN=95;
 function tipHtml(gr){
   const c=gr.c,ship=c.role=="s";
   const status=ship
-    ?`<p class="go">Dikirim ${fmt(c.d)}${c.ship?" via "+esc(c.ship):""}${c.trk?", resi "+esc(c.trk):""}. Menunggu konfirmasi penerima.</p>`
-    :`<p>Memegang sejak ${fmt(c.d)}</p>`;
-  const items=gr.items.map(i=>`<li>${ITEM}<br><strong>${esc(i.sn)}</strong>${i.c.cond=="broken"?` <span class="bad">rusak: ${esc(i.c.rem||"tanpa keterangan")}</span>`:""}</li>`).join("");
+    ?`<p class="go">Sent ${fmt(c.d)}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}. Waiting for the recipient to confirm.</p>`
+    :`<p>Holding since ${fmt(c.d)}</p>`;
+  const items=gr.items.map(i=>`<li>${ITEM}<br><strong>${esc(i.sn)}</strong>${i.c.cond=="broken"?` <span class="bad">broken: ${esc(i.c.rem||"no remark")}</span>`:""}</li>`).join("");
   return `<b>${esc(cap(c.name))}</b><small>ID ${esc(c.id)}, ${esc(cap(c.loc))}</small>${status}<ul>${items}</ul>`;
 }
 
@@ -26,7 +26,7 @@ function arcHtml(sn,p,ai){
   const e=[p[0]+dx/L*ARC_LEN,p[1]+dy/L*ARC_LEN],mx=(p[0]+e[0])/2-dy/L*28,my=(p[1]+e[1])/2+dx/L*28,b=(2.6+ai*.45).toFixed(2);
   return `<path id="a${ai}" class="arc" data-sns="${sn}" pathLength="1" style="--i:${ai}" d="M${p} Q${mx} ${my} ${e}"/>`
    +`<g data-sns="${sn}"><circle class="trav" r="3.6" style="fill:var(--amber);opacity:0"><set attributeName="opacity" to="1" begin="${b}s"/><animateMotion dur="2.8s" begin="${b}s" repeatCount="indefinite"><mpath href="#a${ai}"/></animateMotion></circle></g>`
-   +`<g data-sns="${sn}"><g class="endn" style="--i:${ai}"><circle cx="${e[0]}" cy="${e[1]}" r="6" style="fill:var(--panel);stroke:var(--amber);stroke-width:2;stroke-dasharray:3 3"/><text class="cy" x="${e[0]}" y="${e[1]+20}" text-anchor="middle">menunggu penerima</text></g></g>`;
+   +`<g data-sns="${sn}"><g class="endn" style="--i:${ai}"><circle cx="${e[0]}" cy="${e[1]}" r="6" style="fill:var(--panel);stroke:var(--amber);stroke-width:2;stroke-dasharray:3 3"/><text class="cy" x="${e[0]}" y="${e[1]+20}" text-anchor="middle">awaiting recipient</text></g></g>`;
 }
 
 function markerHtml(gr,p,t){
@@ -60,9 +60,9 @@ export function renderMap(g){
   const land=LAND.map(poly=>`<polygon class="land" points="${poly.map(q=>xy(q[0],q[1]).join(",")).join(" ")}"/>`).join("");
   const labels=[...cities.entries()].map(([k,p])=>{const L=LEFT.includes(k);
     return `<circle cx="${p[0]}" cy="${p[1]}" r="3" style="fill:var(--panel);stroke:var(--mute);stroke-width:1.5"/><text class="cy" x="${p[0]+(L?-8:8)}" y="${p[1]+14}" text-anchor="${L?"end":"start"}">${esc(cap(k))}</text>`}).join("");
-  const note=missing.size?`<p class="mn">${missing.size} kota belum ada di peta: ${[...missing].map(x=>esc(cap(x))).join(", ")}. Tambahkan di js/config/cities.js.</p>`:"";
+  const note=missing.size?`<p class="mn">${missing.size} ${missing.size>1?"cities are":"city is"} not on the map yet: ${[...missing].map(x=>esc(cap(x))).join(", ")}. Add ${missing.size>1?"them":"it"} in js/config/cities.js.</p>`:"";
 
-  $("#map").innerHTML=`<svg viewBox="-10 -10 940 360" role="group" aria-label="Peta posisi alat ukur di Indonesia"><defs><pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" style="fill:var(--teal);fill-opacity:.07"/><circle cx="4.5" cy="4.5" r="1.7" style="fill:var(--mute);fill-opacity:.4"/></pattern></defs>`
-   +`<line class="eq" x1="-10" x2="930" y1="120" y2="120"/><text class="eqt" x="922" y="114" text-anchor="end">khatulistiwa</text>`
-   +`${land}${arcs.join("")}${labels}${mk.join("")}</svg>${note}`;
+  $("#map").innerHTML=`<svg viewBox="-10 -10 940 360" role="group" aria-label="Map of measurement tool positions in Indonesia"><defs><pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" style="fill:var(--teal);fill-opacity:.07"/><circle cx="4.5" cy="4.5" r="1.7" style="fill:var(--mute);fill-opacity:.4"/></pattern></defs>`
+   +`<line class="eq" x1="-10" x2="930" y1="120" y2="120"/><text class="eqt" x="922" y="114" text-anchor="end">equator</text>`
+   +`${land}${arcs.join("")}${labels}${mk.join("")}${g.length?"":'<text class="nr" x="470" y="175" text-anchor="middle">No record</text>'}</svg>${note}`;
 }

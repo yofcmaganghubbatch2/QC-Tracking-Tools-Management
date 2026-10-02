@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.1.1
+- Tanggal berupa teks dibaca day-first (dd/mm/yyyy, sesuai date picker Google Form). Sebelumnya teks seperti 05/10/2026 bisa terbaca 10 Mei. Tanggal mustahil atau ambigu kini dilewati dan dilaporkan sebagai "skipped", bukan ditebak
+
+## 2.1.0
+- Sumber data pindah dari service account Google Cloud ke Google Apps Script (`apps-script/Code.gs`). Tidak perlu Google Cloud, file kunci JSON, maupun library tambahan (`npm install` tidak diperlukan)
+- Script membuang kolom email dan foto sebelum data keluar dari Google, dan mengirim tanggal sebagai teks supaya tidak bergeser hari
+- Fungsi Vercel memanggil web app dari sisi server; URL dan kunci Apps Script tidak pernah sampai ke browser
+- Variabel server sekarang hanya: `APPS_SCRIPT_URL`, `APPS_SCRIPT_KEY`, `ACCESS_CODE`
+- Tes baru untuk Code.gs (dengan layanan Google tiruan) dan untuk pemanggil Apps Script
+
+## 2.0.0 (final)
+- Data langsung dari Google Sheet lewat `api/tools.js` (service account, izin Viewer saja). Kolom email tidak dikirim ke browser
+- Akses dilindungi kode akses (`ACCESS_CODE`); tanpa kode, server menolak dan sheet tidak dibaca
+- Data kosong: seluruh tampilan tetap ada, isinya "No record"
+- Seluruh teks tampilan berbahasa Inggris
+- Mode demo: tambahkan `?demo` di alamat untuk melihat data contoh tanpa koneksi spreadsheet
+- Tombol "Load spreadsheet" dan library xlsx dari CDN dihapus (tidak diperlukan lagi)
+- Header keamanan di `vercel.json` (CSP, nosniff, no-referrer, X-Frame-Options)
+- Tes otomatis di `tests/` (`npm test`): API, tampilan demo, kosong, API, dan kode akses
+- `Count until` otomatis hari ini untuk data asli
+
 ## 1.2.0
 - Peta digambar ulang: bentuk pulau lebih akurat (Sumatra, Jawa, Kalimantan, Sulawesi, Nusa Tenggara, Maluku, Papua, Semenanjung Malaysia), latar berwarna lembut, garis khatulistiwa
 - Daftar kota diperluas jadi ±75 kota (ibu kota provinsi dan kota industri), nama dicocokkan otomatis ("Kota Bandung" tetap kena "bandung"). Jambi dan kota di data contoh semuanya sudah ada
