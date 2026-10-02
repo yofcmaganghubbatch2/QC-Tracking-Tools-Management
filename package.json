@@ -1,12 +1,12 @@
 {
   "name": "qc-tools-tracker",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "npx serve .",
     "dev:api": "npx vercel dev",
-    "test": "node --test tests/api.test.mjs tests/sheets.test.mjs tests/appsscript.test.mjs tests/parser.test.mjs tests/ui-demo.test.mjs tests/ui-empty.test.mjs tests/ui-api.test.mjs tests/ui-auth.test.mjs"
+    "test": "node --test tests/api.test.mjs tests/sheets.test.mjs tests/appsscript.test.mjs tests/parser.test.mjs tests/paging.test.mjs tests/ui-nav.test.mjs tests/ui-demo.test.mjs tests/ui-empty.test.mjs tests/ui-api.test.mjs tests/ui-auth.test.mjs"
   },
   "engines": {
     "node": ">=18"

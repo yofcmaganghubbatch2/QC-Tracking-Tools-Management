@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.0
+- Responsif untuk semua perangkat: kartu menyesuaikan jumlah kolom (1 sampai 3), kontrol memenuhi lebar di HP, area sentuh minimal 44px, mendukung layar berponi
+- Current tool positions berhalaman (2 baris per halaman) dengan tombol Prev/Next, geser jari di HP, dan animasi geser
+- Filter baru: Route map punya filter City dan Tool, Current tool positions punya filter PIC. Tiap bagian punya filter sendiri
+- Handover log berhalaman (10 baris per halaman). Di HP, tiap catatan tampil sebagai kartu rapi (tanggal dan peran, PIC, lokasi dan alat), bukan kolom yang menumpuk
+- Di layar sempit, peta otomatis di-zoom ke area yang ada alatnya supaya tulisannya terbaca
+- Klik kartu sekarang menyorot alat itu di peta tanpa menyembunyikan kartu lain
+- Tes baru untuk paging dan filter (41 tes)
+
 ## 2.1.1
 - Tanggal berupa teks dibaca day-first (dd/mm/yyyy, sesuai date picker Google Form). Sebelumnya teks seperti 05/10/2026 bisa terbaca 10 Mei. Tanggal mustahil atau ambigu kini dilewati dan dilaporkan sebagai "skipped", bukan ditebak
 

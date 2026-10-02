@@ -1,4 +1,4 @@
-# Tracking QC Measurement Tools (v2.1.1)
+# Tracking QC Measurement Tools (v2.2)
 
 Dashboard pelacak alat ukur QC: posisi alat sekarang, PIC, lama di PIC, peta rute, dan log serah terima.
 Data diambil langsung dari Google Sheet lewat Google Apps Script dan fungsi server di Vercel. Teks tampilan berbahasa Inggris.
@@ -45,6 +45,12 @@ Semua (Google Sheet, Apps Script, GitHub, Vercel) ada di satu akun, jadi tinggal
 - `lib/`: akses (`access.js`), pemanggil Apps Script (`sheets.js`), ubah baris jadi catatan (`records.js`), pengatur permintaan (`handler.js`)
 - `tests/`: tes otomatis
 - `samples/`: xlsx contoh. Impor ke Google Sheet baru untuk mencoba tanpa data asli
+
+## Filter dan halaman
+- Route map: filter **City** (posisi alat sekarang) dan **Tool**. Keduanya digabung.
+- Current tool positions: filter **PIC** (pemegang atau pengirim terakhir). Kartu berhalaman, jumlah per halaman mengikuti lebar layar (kolom x 2 baris).
+- Handover log: filter peran dan pencarian, 10 baris per halaman.
+- Ubah jumlah baris log di `SIZE` pada `js/ui/log.js`, dan jumlah baris kartu di `cardsPerPage()` pada `js/ui/cards.js`.
 
 ## Menambah kota di peta
 Edit `js/config/cities.js` (`nama:[longitude,latitude]`, huruf kecil). Kota yang belum terdaftar disebut namanya di bawah peta.

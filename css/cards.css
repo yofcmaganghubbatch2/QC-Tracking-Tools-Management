@@ -1,5 +1,5 @@
 /* gauges */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,470px),1fr));gap:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px 22px;position:relative;overflow:hidden}
 .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--teal)}
 .card.go::before{background:var(--amber)}.card.bad::before{background:var(--red)}
@@ -33,3 +33,10 @@
 @keyframes popd{from{transform:rotate(45deg) scale(0)}to{transform:rotate(45deg) scale(1)}}
 @keyframes growy{to{transform:scaleY(1)}}
 .cards .empty{grid-column:1/-1;background:var(--panel);border:1px dashed var(--line);border-radius:22px;padding:34px;text-align:center;color:var(--mute)}
+.pager{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px;flex-wrap:wrap}
+.pager:empty{display:none}
+.pg-info{color:var(--mute);font-size:.9rem}
+@keyframes slidenext{from{opacity:0;transform:translateX(36px)}}
+@keyframes slideprev{from{opacity:0;transform:translateX(-36px)}}
+.cards.slide-next .card{animation:slidenext .35s ease both}
+.cards.slide-prev .card{animation:slideprev .35s ease both}

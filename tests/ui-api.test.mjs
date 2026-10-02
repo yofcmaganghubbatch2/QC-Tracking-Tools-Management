@@ -8,7 +8,7 @@ await import("../js/main.js");await wait(150);
 
 test("mode API: kode akses dikirim lewat header dan data tampil",()=>{
   assert.equal(seen.url,"/api/tools");assert.equal(seen.code,"kode-uji");
-  assert.equal(count(d.el("#cards").innerHTML,/<article class="card/g),9);
+  assert.equal(count(d.el("#cards").innerHTML,/<article class="card/g),4);assert.match(d.el("#cards-pager").innerHTML,/9 tools/);
   assert.match(d.el("#foot").textContent,/20 records from the spreadsheet/);
   assert.match(d.el("#ref").value,/^\d{4}-\d{2}-\d{2}$/);
 });

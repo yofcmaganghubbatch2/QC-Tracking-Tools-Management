@@ -31,3 +31,4 @@ select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid va
 #tip ul{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:1px solid var(--line)}
 #tip li+li{margin-top:6px}#tip .bad{color:var(--red);font-weight:500}
 .nr{font-size:18px;font-weight:700;fill:var(--mute)}
+.mapbox svg.narrow .cy,.mapbox svg.narrow .eqt{font-size:12px}

@@ -1,2 +1,27 @@
-@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}
-.row{grid-template-columns:1fr 1fr;gap:4px 12px}.row.head{display:none}}
+@media (max-width:1000px){
+  .bar h2{font-size:1.45rem}
+}
+@media (max-width:760px){
+  .hero{padding:28px 0 12px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+  .scope .tag{display:none}
+  .bar{margin:28px 0 12px}
+  .bar h2{flex:1 0 100%;font-size:1.35rem}
+  .bar select,.bar input[type=search]{flex:1 1 150px}
+  .card{padding:16px 16px 16px 20px}
+  .serial{font-size:1.6rem}
+  .days .big{font-size:2.2rem}
+  .row.head{display:none}
+  .row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"date role" "pic pic" "loc tool";gap:4px 12px;padding:14px 16px;align-items:start}
+  .c-date{grid-area:date;font-weight:700}
+  .c-role{grid-area:role;justify-self:end}
+  .c-pic{grid-area:pic}
+  .c-loc{grid-area:loc;color:var(--mute)}
+  .c-tool{grid-area:tool;text-align:right}
+}
+@media (max-width:420px){
+  .stat{padding:12px 14px}
+  .stat .big{font-size:2rem}
+  .scope svg{height:110px}
+  .seg button{padding:7px 12px}
+}

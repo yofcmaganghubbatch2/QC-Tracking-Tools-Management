@@ -23,7 +23,9 @@
 <div class="wrap">
 <header class="hero">
   <h1>Tracking QC Measurement Tools</h1>
-  <p><b> Manage and track your Ultrasonic Thickness Gauge the easy way</b><br> Keep tabs on tool status, current user, usage time, and transfer history all in one place</p>
+  <p><b>Manage and track your Ultrasonic Thickness Gauge the easy way</b><br>
+Keep tabs on tool status, current user, usage time, and transfer history all in one place
+</p>
   <div class="scope" aria-hidden="true">
     <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
       <g class="grid"><line x1="0" x2="1000" y1="75" y2="75"/><line x1="0" x2="1000" y1="25" y2="25"/><line x1="0" x2="1000" y1="125" y2="125"/>
@@ -39,6 +41,7 @@
 
 <div class="bar" style="margin-top:34px"><h2>Route map</h2>
   <span style="color:var(--mute);font-size:.9rem"><i class="dt" style="background:var(--teal);margin-left:0"></i>with PIC<i class="dt" style="background:var(--amber)"></i>in transit<i class="dt" style="background:var(--red)"></i>broken</span>
+  <select id="citysel" aria-label="Filter by city"><option value="">All cities</option></select>
   <select id="snsel" aria-label="Filter by serial number"><option value="">All tools</option></select></div>
 <div class="mapwrap"><div class="scope mapbox" id="map"></div><div id="tip" hidden></div></div>
 
@@ -49,8 +52,10 @@
   <label style="color:var(--mute)">Count until <input type="date" id="ref"></label>
   <button class="btn" id="today">Today</button>
   <button class="btn" id="reload">Reload data</button>
+  <select id="picsel" aria-label="Filter by PIC"><option value="">All PICs</option></select>
 </div>
 <div class="cards" id="cards"></div>
+<div class="pager" id="cards-pager"></div>
 
 <div class="bar" style="margin-top:44px">
   <h2>Handover log</h2>
@@ -63,6 +68,7 @@
   <input type="search" id="q" placeholder="Search name, city, serial" aria-label="Search">
 </div>
 <div class="log" id="log"></div>
+<div class="pager" id="log-pager"></div>
 <footer id="foot"></footer>
 </div>
 

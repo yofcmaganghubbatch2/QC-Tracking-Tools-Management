@@ -9,3 +9,4 @@
 .row small{color:var(--mute);display:block}
 .empty{padding:34px;text-align:center;color:var(--mute)}
 footer{margin-top:26px;color:var(--mute);font-size:.88rem}
+.c-date{font-weight:500}

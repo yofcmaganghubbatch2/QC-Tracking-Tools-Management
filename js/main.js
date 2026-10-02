@@ -4,10 +4,11 @@ import {iso} from "./logic/format.js";
 import {group} from "./logic/gauges.js";
 import {loadData,AuthError,getCode,setCode,clearCode} from "./data/source.js";
 import {renderStats} from "./ui/stats.js";
-import {renderCards,initCards} from "./ui/cards.js";
+import {renderCards,initCards,relayoutCards} from "./ui/cards.js";
 import {renderMap} from "./ui/map.js";
+import {renderLog,initLog} from "./ui/log.js";
 import {initTooltip} from "./ui/tooltip.js";
-import {fillSel,applySel,initFilters,moveSeg} from "./ui/filters.js";
+import {fillFilters,applyMapFilter,initFilters,moveSeg} from "./ui/filters.js";
 import {showNotice,clearNotice} from "./ui/notice.js";
 import {initGate,askCode} from "./ui/gate.js";
 
@@ -16,8 +17,8 @@ const today=()=>iso(new Date());
 const setRef=()=>{$("#ref").value=state.source==="demo data"?(state.data.map(r=>r.d).sort().pop()||today()):today()};
 
 function render(){
-  const g=group(state.data);
-  renderStats(g);fillSel(g);renderCards(g);renderMap(g);applySel();
+  const g=group(state.data);state.g=g;
+  renderStats(g);fillFilters(g);renderCards();renderMap(g);applyMapFilter();renderLog();
   const time=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
   $("#foot").textContent=state.source==="demo data"
     ?"Showing demo data. Remove ?demo from the address to see the spreadsheet."
@@ -42,13 +43,15 @@ async function load(){
 }
 
 function bind(){
-  initFilters();initCards();initTooltip();
+  initFilters();initCards();initLog();initTooltip();
   initGate(code=>{setCode(code);load()});
-  $("#ref").onchange=()=>renderCards(group(state.data));
-  $("#today").onclick=()=>{$("#ref").value=today();renderCards(group(state.data))};
+  $("#ref").onchange=()=>renderCards();
+  $("#today").onclick=()=>{$("#ref").value=today();renderCards()};
   $("#reload").onclick=load;
   requestAnimationFrame(moveSeg);
-  addEventListener("resize",moveSeg);
+  let t;addEventListener("resize",()=>{moveSeg();clearTimeout(t);t=setTimeout(relayoutCards,150)});
+  const narrow=matchMedia("(max-width:700px)");
+  if(narrow.addEventListener)narrow.addEventListener("change",()=>{renderMap(state.g);applyMapFilter()});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveSeg);
 }
 
