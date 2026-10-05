@@ -7,8 +7,8 @@
 // Nama tab yang dibaca (lihat tab di bagian bawah Google Sheet).
 const TAB_NAME = 'Form Responses 1';
 
-// Kolom yang TIDAK dikirim ke dashboard (email dan foto tidak dipakai tampilan).
-const DROP_COLUMNS = /^(email|ultrasonic thickness gauge photo)/i;
+// Kolom yang TIDAK dikirim ke dashboard (email dan kedua foto tidak dipakai tampilan).
+const DROP_COLUMNS = /^\s*(email|ultrasonic thickness gauge photo|supporting equipment photo)/i;
 
 function doGet(e) {
   // Kunci rahasia disimpan di Project Settings > Script Properties dengan nama API_KEY.

@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.0.0
+- Mengikuti Google Form baru: kolom tanggal jadi "Tools Departure or Arrival Date", nomor seri berupa pilihan tetap, ada "Supporting Equipment Included?", "Supporting Equipment" (checkbox), dan "Supporting Equipment Photo"
+- Alat pendukung (Ultrasonic Gel, Measuring Tape, Tailor Tape, Cutter, Caliper, Tape) dicatat sebagai isi tiap pengiriman, tampil sebagai label di kartu, garis waktu, log, dan tooltip peta. Posisi tiap alat pendukung tidak dilacak karena tidak punya nomor seri
+- Tanda "tidak cocok": kalau alat pendukung yang dikirim berbeda dengan yang dicentang penerima, muncul peringatan ("Not received: ..." atau "Extra: ...") dan statistik baru "Equipment mismatches"
+- Log punya filter alat pendukung (satu alat, atau "No supporting equipment") dan pencarian ikut mencari nama alat pendukung
+- Header dicocokkan tanpa peduli spasi di ujung dan huruf besar/kecil. Kolom "Supporting Equipment" dicocokkan persis supaya tidak tertukar dengan "Included?" dan "Photo"
+- Data master (6 nomor seri dan 6 alat pendukung) di `js/config/master.js`; kartu diurutkan sesuai master
+- Data dummy baru: 6 alat, 99 catatan, 19 Januari sampai 1 Oktober 2026. Ada alat rusak, alat dalam pengiriman, dan 6 pengiriman yang alat pendukungnya tidak cocok. File contoh `samples/QC_Measurement_Tools_sample.xlsx` berkolom persis seperti Form baru
+- `Code.gs` ikut membuang kolom "Supporting Equipment Photo"
+- 51 tes otomatis
+
+## 2.2.1
+- Handover log di HP dibuat padat: tiap catatan 2 sampai 3 baris dengan tanggal di kolom kiri, nama PIC dan peran di atas, lokasi dan nomor seri di bawahnya, lalu detail pengiriman atau kerusakan. "Good condition" dan ID disembunyikan di HP supaya tidak ramai (tetap tampil di layar lebar)
+- Tombol filter peran tidak lagi menyempit jadi bulatan di HP
+
 ## 2.2.0
 - Responsif untuk semua perangkat: kartu menyesuaikan jumlah kolom (1 sampai 3), kontrol memenuhi lebar di HP, area sentuh minimal 44px, mendukung layar berponi
 - Current tool positions berhalaman (2 baris per halaman) dengan tombol Prev/Next, geser jari di HP, dan animasi geser

@@ -40,3 +40,8 @@
 @keyframes slideprev{from{opacity:0;transform:translateX(-36px)}}
 .cards.slide-next .card{animation:slidenext .35s ease both}
 .cards.slide-prev .card{animation:slideprev .35s ease both}
+.eqchip{display:inline-block;font-style:normal;font-size:.72rem;line-height:1.5;padding:0 8px;border-radius:999px;background:color-mix(in srgb,var(--teal) 13%,transparent);color:var(--teal);font-weight:500;white-space:nowrap}
+.eqrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.eqwarn{margin-top:4px;font-size:.78rem;color:var(--red);font-weight:500}
+.eqline{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:.82rem;color:var(--mute)}
+.eqline>span{margin-right:4px}

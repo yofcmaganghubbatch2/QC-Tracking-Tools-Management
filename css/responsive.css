@@ -12,16 +12,22 @@
   .serial{font-size:1.6rem}
   .days .big{font-size:2.2rem}
   .row.head{display:none}
-  .row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"date role" "pic pic" "loc tool";gap:4px 12px;padding:14px 16px;align-items:start}
-  .c-date{grid-area:date;font-weight:700}
+  .row{grid-template-columns:52px minmax(0,1fr) auto;grid-template-areas:"date pic role" "date loc sn" "date det det" "date eq eq";gap:2px 12px;padding:10px 14px;align-items:center;font-size:.9rem}
+  .c-tool{display:contents}
+  .c-date{grid-area:date;align-self:start;font-size:.8rem;font-weight:500;color:var(--mute);line-height:1.25}
+  .c-pic{grid-area:pic}.c-pic small{display:none}
   .c-role{grid-area:role;justify-self:end}
-  .c-pic{grid-area:pic}
-  .c-loc{grid-area:loc;color:var(--mute)}
-  .c-tool{grid-area:tool;text-align:right}
+  .c-loc{grid-area:loc;color:var(--mute);font-size:.84rem}
+  .sn{grid-area:sn;justify-self:end;font-weight:700}
+  .d{grid-area:det;font-size:.8rem;margin-top:2px}
+  .d.ok{display:none}
+  .c-eq{grid-area:eq;margin-top:2px}
+  .c-eq.none{display:none}
+  .chip{font-size:.75rem;padding:1px 9px}
+  .seg button{min-width:56px}
 }
 @media (max-width:420px){
   .stat{padding:12px 14px}
   .stat .big{font-size:2rem}
   .scope svg{height:110px}
-  .seg button{padding:7px 12px}
 }

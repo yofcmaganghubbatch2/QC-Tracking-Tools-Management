@@ -8,6 +8,6 @@ test("data kosong: tampilan tetap ada dengan tulisan No record",()=>{
   assert.match(d.el("#map").innerHTML,/No record/);
   assert.ok(count(d.el("#map").innerHTML,/class="land"/g)>10,"peta tetap tergambar");
   assert.match(d.el("#log").innerHTML,/row head/);assert.match(d.el("#log").innerHTML,/No record/);
-  assert.equal(count(d.el("#stats").innerHTML,/class="stat/g),4);
+  assert.equal(count(d.el("#stats").innerHTML,/class="stat/g),5);
   assert.ok(d.el("#notice").hidden);
 });

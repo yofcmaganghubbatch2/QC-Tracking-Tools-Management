@@ -1,9 +1,7 @@
-import test from "node:test";import assert from "node:assert/strict";import fs from "node:fs";
+import test from "node:test";import assert from "node:assert/strict";
 import {paginate} from "../js/logic/paging.js";
-import {group,allowedSerials,locKey,picKey} from "../js/logic/gauges.js";
-
-const sample=JSON.parse(fs.readFileSync(new URL("../js/data/sample.json",import.meta.url),"utf8"));
-const g=group(sample);
+import {allowedSerials,locKey,picKey} from "../js/logic/gauges.js";
+import {g,lastOf} from "./helpers/expect.mjs";
 
 test("paginate: potong halaman dan jaga batas",()=>{
   const l=[...Array(23).keys()];
@@ -13,13 +11,15 @@ test("paginate: potong halaman dan jaga batas",()=>{
   assert.deepEqual(paginate([],3,10),{items:[],page:0,pages:1,total:0,from:0,to:0});
 });
 test("filter peta: kota = posisi alat sekarang",()=>{
-  assert.deepEqual([...allowedSerials(g,{city:"medan"})],["1234555"]);
-  assert.deepEqual([...allowedSerials(g,{city:"denpasar"})].sort(),["1234564","1234565"]);
-  assert.equal(allowedSerials(g,{}).size,9);
+  const k=locKey(lastOf(g[0]).loc),exp=g.filter(x=>locKey(lastOf(x).loc)===k).map(x=>x[0]);
+  assert.deepEqual([...allowedSerials(g,{city:k})].sort(),exp.sort());
+  assert.equal(allowedSerials(g,{}).size,g.length);
+  assert.equal(allowedSerials(g,{city:"kota-tidak-ada"}).size,0);
 });
 test("filter peta: tool dan kota digabung (irisan)",()=>{
-  assert.deepEqual([...allowedSerials(g,{sel:"1234564",city:"denpasar"})],["1234564"]);
-  assert.equal(allowedSerials(g,{sel:"1234560",city:"medan"}).size,0);
+  const [sn,l]=g[0],k=locKey(l[l.length-1].loc);
+  assert.deepEqual([...allowedSerials(g,{sel:sn,city:k})],[sn]);
+  const other=g.find(x=>locKey(lastOf(x).loc)!==k)[0];assert.equal(allowedSerials(g,{sel:other,city:k}).size,0);
 });
 test("kunci kota dan PIC",()=>{
   assert.equal(locKey("Kota Bandung"),"bandung");assert.equal(locKey("Kota Antah Berantah"),"kota antah berantah");

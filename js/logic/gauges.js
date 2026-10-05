@@ -1,6 +1,8 @@
+import {GAUGES} from "../config/master.js";
 import {cityKey} from "./geo.js";
 // Kelompokkan catatan per nomor seri, urut tanggal.
-export function group(data){const m={};[...data].sort((a,b)=>a.d.localeCompare(b.d)).forEach(r=>(m[r.sn]=m[r.sn]||[]).push(r));return Object.entries(m)}
+export function group(data){const m={};[...data].sort((a,b)=>a.d.localeCompare(b.d)).forEach(r=>(m[r.sn]=m[r.sn]||[]).push(r));const idx=sn=>{const i=GAUGES.indexOf(sn);return i<0?GAUGES.length:i};
+  return Object.entries(m).sort((a,b)=>idx(a[0])-idx(b[0]))}
 
 // Kunci kota dan PIC untuk filter. Kota dicocokkan lewat daftar kota (misal "Kota Bandung" = "bandung").
 export const locKey=loc=>cityKey(loc)||String(loc||"").toLowerCase().trim();

@@ -2,6 +2,7 @@ import {$,$$} from "../dom.js";
 import {state} from "../state.js";
 import {esc,cap} from "../logic/format.js";
 import {allowedSerials,locKey,picKey} from "../logic/gauges.js";
+import {EQUIPMENT} from "../config/master.js";
 import {renderLog} from "./log.js";
 
 const opts=(all,items)=>`<option value="">${all}</option>`+items.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join("");
@@ -17,9 +18,11 @@ function tally(g,keyOf,nameOf){
 export function fillFilters(g){
   const tools=g.map(([sn])=>[sn,sn]),cities=tally(g,r=>locKey(r.loc),r=>cap(locKey(r.loc))),pics=tally(g,picKey,r=>cap(r.name));
   const keep=(v,list)=>list.some(([k])=>k===v)?v:null;
+  const eqs=[...new Set([...EQUIPMENT,...state.data.flatMap(r=>r.eq||[])])],eqOpts=[["__none","No supporting equipment"],...eqs.map(e=>[e,e])];
+  state.eq=keep(state.eq,eqOpts);
   state.sel=keep(state.sel,tools);state.city=keep(state.city,cities);state.pic=keep(state.pic,pics);
-  $("#snsel").innerHTML=opts("All tools",tools);$("#citysel").innerHTML=opts("All cities",cities);$("#picsel").innerHTML=opts("All PICs",pics);
-  $("#snsel").value=state.sel||"";$("#citysel").value=state.city||"";$("#picsel").value=state.pic||"";
+  $("#snsel").innerHTML=opts("All tools",tools);$("#citysel").innerHTML=opts("All cities",cities);$("#picsel").innerHTML=opts("All PICs",pics);$("#eqsel").innerHTML=opts("All equipment",eqOpts);
+  $("#snsel").value=state.sel||"";$("#citysel").value=state.city||"";$("#picsel").value=state.pic||"";$("#eqsel").value=state.eq||"";
 }
 
 export function applyMapFilter(){
@@ -37,5 +40,6 @@ export function initFilters(){
   $("#snsel").onchange=e=>{state.sel=e.target.value||null;applyMapFilter()};
   $("#citysel").onchange=e=>{state.city=e.target.value||null;applyMapFilter()};
   $$("#seg button").forEach(b=>b.onclick=()=>{$$("#seg button").forEach(x=>x.setAttribute("aria-pressed",x==b));state.role=b.dataset.r;state.logPage=0;moveSeg();renderLog()});
+  $("#eqsel").onchange=e=>{state.eq=e.target.value||null;state.logPage=0;renderLog()};
   $("#q").oninput=e=>{state.query=e.target.value;state.logPage=0;renderLog()};
 }

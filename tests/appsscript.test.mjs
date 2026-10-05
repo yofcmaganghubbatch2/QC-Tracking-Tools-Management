@@ -13,7 +13,7 @@ function run({props={API_KEY:"kunci"},tabs,tz="Asia/Jakarta"}){
   return {call:e=>{const o=ctx.doGet(e);return JSON.parse(o.s)},fmt:out};
 }
 const d=s=>new Date(s+"T00:00:00Z");
-const TAB=[["Timestamp","Email Address","Full Name","Location","Ultrasonic Thickness Gauge Photo","Sent or Receipt Date"],[d("2026-09-28"),"a@x.com","Abu","Bandung","https://drive/xx",d("2026-09-28")],[d("2026-09-30"),"b@x.com","Lahab","Sidoarjo","",d("2026-09-30")]];
+const TAB=[["Timestamp","Email Address","Full Name","Location","Ultrasonic Thickness Gauge Photo","Supporting Equipment Included?","Supporting Equipment","Supporting Equipment Photo","Tools Departure or Arrival Date"],[d("2026-09-28"),"a@x.com","Abu","Bandung","https://drive/xx","Yes","Caliper, Cutter","https://drive/yy",d("2026-09-28")],[d("2026-09-30"),"b@x.com","Lahab","Sidoarjo","","No","","",d("2026-09-30")]];
 
 test("kunci salah atau kosong: Unauthorized",()=>{
   const s=run({tabs:{"Form Responses 1":TAB}});
@@ -22,10 +22,10 @@ test("kunci salah atau kosong: Unauthorized",()=>{
 test("API_KEY belum diisi: ditolak walau kunci kosong",()=>{
   const s=run({props:{},tabs:{"Form Responses 1":TAB}});assert.match(s.call({parameter:{key:""}}).error,/API_KEY is not set/);
 });
-test("kunci benar: email dan foto dibuang, tanggal jadi teks yyyy-MM-dd",()=>{
+test("kunci benar: email dan kedua foto dibuang, tanggal jadi teks yyyy-MM-dd",()=>{
   const s=run({tabs:{"Form Responses 1":TAB}});const r=s.call({parameter:{key:"kunci"}});
-  assert.deepEqual(r.values[0],["Timestamp","Full Name","Location","Sent or Receipt Date"]);
-  assert.deepEqual(r.values[1],["2026-09-28","Abu","Bandung","2026-09-28"]);
+  assert.deepEqual(r.values[0],["Timestamp","Full Name","Location","Supporting Equipment Included?","Supporting Equipment","Tools Departure or Arrival Date"]);
+  assert.deepEqual(r.values[1],["2026-09-28","Abu","Bandung","Yes","Caliper, Cutter","2026-09-28"]);
   assert.ok(!JSON.stringify(r).includes("@x.com")&&!JSON.stringify(r).includes("drive"));
   assert.deepEqual(s.fmt[0],["Asia/Jakarta","yyyy-MM-dd"]);
 });

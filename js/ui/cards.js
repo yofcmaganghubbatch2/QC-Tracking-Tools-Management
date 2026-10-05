@@ -2,6 +2,7 @@ import {$,smooth} from "../dom.js";
 import {state} from "../state.js";
 import {esc,cap,fmt,diff} from "../logic/format.js";
 import {picKey} from "../logic/gauges.js";
+import {handoverChecks} from "../logic/equipment.js";
 import {paginate} from "../logic/paging.js";
 import {renderPager,onPager} from "./pager.js";
 import {pick} from "./filters.js";
@@ -15,14 +16,19 @@ export function cardsPerPage(){
   return Math.max(1,Math.min(3,Math.floor(w/340)))*2;
 }
 
-function stop(r,prev,last,i){
+const chips=eq=>(eq||[]).map(e=>`<i class="eqchip">${esc(e)}</i>`).join("");
+const checkText=c=>[c.missing.length?"Not received: "+c.missing.map(esc).join(", "):"",c.extra.length?"Extra: "+c.extra.map(esc).join(", "):""].filter(Boolean).join(". ");
+
+function stop(r,prev,last,i,check){
   const gap=prev?`<small>+${diff(prev.d,r.d)} day${diff(prev.d,r.d)===1?"":"s"}</small>`:"";
-  return `<li class="${r.role}${last?" last":""}" style="--i:${i}"><span class="dot"></span><div class="tx"><b>${esc(cap(r.name))}</b><span>${r.role=="s"?"sent":"received"}, ${esc(cap(r.loc))}</span></div><time>${fmt(r.d)}${gap}</time></li>`;
+  const eq=r.eq&&r.eq.length?`<div class="eqrow">${chips(r.eq)}</div>`:"";
+  const warn=check&&!check.ok?`<div class="eqwarn">${checkText(check)}</div>`:"";
+  return `<li class="${r.role}${last?" last":""}" style="--i:${i}"><span class="dot"></span><div class="tx"><b>${esc(cap(r.name))}</b><span>${r.role=="s"?"sent":"received"}, ${esc(cap(r.loc))}</span>${eq}${warn}</div><time>${fmt(r.d)}${gap}</time></li>`;
 }
 
-function timeline(l){
+function timeline(l,checks){
   const off=Math.max(0,l.length-KEEP);
-  const all=l.map((r,i)=>stop(r,l[i-1],i==l.length-1,Math.max(0,i-off)));
+  const all=l.map((r,i)=>stop(r,l[i-1],i==l.length-1,Math.max(0,i-off),checks[i]));
   const older=off?`<details class="older"><summary>${off} earlier record${off>1?"s":""}</summary><ol class="tl">${all.slice(0,off).join("")}</ol></details>`:"";
   return older+`<ol class="tl">${all.slice(off).join("")}</ol>`;
 }
@@ -30,12 +36,15 @@ function timeline(l){
 function cardHtml([sn,l],ref){
   const c=l[l.length-1],ship=c.role=="s",bad=c.cond=="broken";
   const days=diff(c.d,ref),cls=bad?"bad":ship?"go":"";
+  const checks=handoverChecks(l),last=checks[l.length-1];
   const pill=bad?"Broken":ship?"In transit":"With PIC";
   const line=ship?`Sent from ${esc(cap(c.loc))}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}`:`${esc(cap(c.loc))}, since ${fmt(c.d)}`;
   return `<article class="card ${cls}${state.sel===sn?" sel":""}" data-sn="${esc(sn)}" tabindex="0"><div class="top"><div class="serial">${esc(sn)}</div><span class="pill ${cls}">${pill}</span></div>
 <div class="holder"><div><b>${esc(cap(c.name))}</b><small>${line}</small></div><div class="days"><div class="big">${days}</div><small>${days==1?"day":"days"} ${ship?"in transit":"with PIC"}</small></div></div>
 ${bad?`<p class="note">Broken: ${esc(c.rem||"no remark")}</p>`:""}
-${timeline(l)}</article>`;
+${c.eq&&c.eq.length?`<p class="eqline"><span>${ship?"Sent with":"Arrived with"}</span>${chips(c.eq)}</p>`:""}
+${last&&!last.ok?`<p class="note">Equipment mismatch. ${checkText(last)}</p>`:""}
+${timeline(l,checks)}</article>`;
 }
 
 // dir = "next" / "prev" untuk animasi geser saat pindah halaman.

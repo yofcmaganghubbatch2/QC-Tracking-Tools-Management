@@ -17,7 +17,7 @@ function tipHtml(gr){
   const status=ship
     ?`<p class="go">Sent ${fmt(c.d)}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}. Waiting for the recipient to confirm.</p>`
     :`<p>Holding since ${fmt(c.d)}</p>`;
-  const items=gr.items.map(i=>`<li>${ITEM}<br><strong>${esc(i.sn)}</strong>${i.c.cond=="broken"?` <span class="bad">broken: ${esc(i.c.rem||"no remark")}</span>`:""}</li>`).join("");
+  const items=gr.items.map(i=>`<li>${ITEM}<br><strong>${esc(i.sn)}</strong>${i.c.eq&&i.c.eq.length?`<br><small>+ ${i.c.eq.map(esc).join(", ")}</small>`:""}${i.c.cond=="broken"?` <span class="bad">broken: ${esc(i.c.rem||"no remark")}</span>`:""}</li>`).join("");
   return `<b>${esc(cap(c.name))}</b><small>ID ${esc(c.id)}, ${esc(cap(c.loc))}</small>${status}<ul>${items}</ul>`;
 }
 
