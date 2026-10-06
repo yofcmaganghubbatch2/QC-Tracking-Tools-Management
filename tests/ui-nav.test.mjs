@@ -1,4 +1,4 @@
-import test from "node:test";import assert from "node:assert/strict";
+import test from "node:test";import assert from "node:assert/strict";import fs from "node:fs";
 import {install,wait,count} from "./helpers/fake-dom.mjs";
 import {sample,g,lastOf,fmtDate} from "./helpers/expect.mjs";
 import {picKey,locKey} from "../js/logic/gauges.js";
@@ -38,28 +38,17 @@ test("log: halaman terakhir berisi catatan terlama",()=>{
   const pages=Math.ceil(sample.length/10);for(let i=1;i<pages;i++)click("#log-pager",1);
   assert.equal(rows(),sample.length-(pages-1)*10);assert.match(d.el("#log").innerHTML,new RegExp(fmtDate(sample[0].d)));assert.match(d.el("#log-pager").innerHTML,new RegExp(`Page ${pages} of ${pages}`));
 });
-test("log: pencarian kembali ke halaman 1 dan bisa mencari nama alat pendukung",()=>{
-  const n=sample.filter(r=>r.name.toLowerCase().includes("siti")).length;
-  d.el("#q").oninput({target:{value:"siti"}});assert.equal(rows(),Math.min(n,10));assert.match(d.el("#log-pager").innerHTML,new RegExp(`${n} record`));
-  const m=sample.filter(r=>r.eq.includes("Cutter")).length;
-  d.el("#q").oninput({target:{value:"cutter"}});assert.match(d.el("#log-pager").innerHTML,new RegExp(`${m} record`));
-  d.el("#q").oninput({target:{value:"tidak-ada"}});assert.match(d.el("#log").innerHTML,/No matching records/);
-  d.el("#q").oninput({target:{value:""}});
-});
-test("log: filter alat pendukung (satu alat, dan tanpa alat pendukung)",()=>{
-  assert.match(d.el("#eqsel").innerHTML,/All equipment/);assert.match(d.el("#eqsel").innerHTML,/value="__none">No supporting equipment/);assert.match(d.el("#eqsel").innerHTML,/value="Caliper">Caliper/);
-  d.el("#eqsel").onchange({target:{value:"Caliper"}});
-  const c=sample.filter(r=>r.eq.includes("Caliper")).length;assert.match(d.el("#log-pager").innerHTML+d.el("#log").innerHTML,new RegExp(`${c} record|<div class="row">`));
-  assert.equal(rows(),Math.min(c,10));
-  d.el("#eqsel").onchange({target:{value:"__none"}});
-  const n=sample.filter(r=>!r.eq.length).length;assert.equal(rows(),Math.min(n,10));
-  d.el("#eqsel").onchange({target:{value:""}});assert.equal(rows(),10);
+test("log: kontrol sendiri hanya All/Senders/Recipients (filter alat pendukung dan pencarian sudah dihapus)",()=>{
+  const html=fs.readFileSync(new URL("../index.html",import.meta.url),"utf8");
+  assert.ok(!/id="eqsel"|id="q"/.test(html));
+  assert.match(html,/data-r="all"[\s\S]*data-r="s"[\s\S]*data-r="r"/);
 });
 test("log: detail diberi kelas (ok disembunyikan di HP, bad merah)",()=>{
   const b=sample.find(r=>r.cond==="broken");
-  d.el("#q").oninput({target:{value:`${b.name} ${b.loc} ${b.sn}`.toLowerCase()}});
+  // filter Tool + City di atas halaman: log hanya berisi catatan alat itu di kota itu (riwayat), termasuk catatan rusaknya
+  d.el("#snsel").onchange({target:{value:b.sn}});d.el("#citysel").onchange({target:{value:locKey(b.loc)}});
   assert.match(d.el("#log").innerHTML,new RegExp(`class="d bad">Broken: ${b.rem}`));
-  d.el("#q").oninput({target:{value:""}});
+  d.el("#freset").onclick();
   assert.match(d.el("#log").innerHTML,/class="d ok">Good condition/);
 });
 test("peta: viewBox ada dan penanda tetap tergambar",()=>{assert.match(d.el("#map").innerHTML,/viewBox="[-\d. ]+"/)});

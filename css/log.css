@@ -12,3 +12,5 @@ footer{margin-top:26px;color:var(--mute);font-size:.88rem}
 .c-date{font-weight:500}
 .d.bad{color:var(--red)}
 .c-eq{display:flex;flex-wrap:wrap;gap:4px;align-items:center;color:var(--mute)}
+.logsum{margin:-2px 0 12px;color:var(--mute);font-size:.9rem}
+.logsum[hidden]{display:none}

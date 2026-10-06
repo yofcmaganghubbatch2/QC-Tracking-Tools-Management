@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.2.0
+- Semua kartu alat kini satu ukuran (layar lebar). Riwayat lengkap yang dibuka menimpa area daftar terbaru, jadi tinggi kartu tidak berubah dan kartu tetangga tidak ikut bergeser. Di HP (1 kolom) tinggi mengikuti isi
+- Handover log mengikuti filter di atas halaman sebagai **riwayat**: Tool, City, dan PIC dicocokkan ke tiap catatan, bukan ke posisi alat sekarang. Memilih Denpasar menampilkan semua catatan di Denpasar. Ada keterangan filter di bawah judul log
+- Dropdown City dan PIC berisi semua kota dan PIC yang pernah ada di log. Angka di kurung tetap jumlah alat yang sekarang ada di situ (0 = hanya ada di riwayat). Kartu dan peta tetap menunjukkan keadaan sekarang, dengan pesan kosong yang menunjuk ke log
+- Filter alat pendukung dan kotak pencarian di handover log dihapus. Kontrol log tinggal All / Senders / Recipients. Chip alat pendukung tetap tampil di tiap baris
+- 64 tes otomatis
+
 ## 3.1.0
 - Kartu alat dirombak: hanya 3 riwayat terbaru yang tampil. Klik kartu (atau tombol "All N records") untuk membuka riwayat lengkap di area scroll di dalam kartu. Kartu tidak lagi ikut memanjang mengikuti kartu tetangga yang riwayatnya panjang. Kartu yang dibuka tetap terbuka saat filter atau halaman berubah
 - Tombol "Show on map" di kartu menyorot alat di peta (mengganti perilaku klik kartu yang lama)

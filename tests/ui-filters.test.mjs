@@ -22,11 +22,35 @@ test("filter Tool: kartu, log, dan ringkasan ikut berubah (bukan cuma peta)",()=
   reset();
   assert.equal(serials().length,4);assert.equal(rows(),10);assert.match(d.el("#fsum").textContent,/^6 tools$/);assert.equal(d.el("#freset").hidden,true);
 });
-test("filter City dan PIC digabung (AND), hasil kosong diberi pesan",()=>{
+test("filter City: kartu = alat yang SEKARANG di kota itu, log = riwayat semua catatan di kota itu",()=>{
   const k=locKey(lastOf(g[0]).loc),inCity=g.filter(x=>locKey(lastOf(x).loc)===k).map(x=>x[0]);
-  pick("#citysel",k);assert.deepEqual(serials(),inCity.slice(0,4));
-  const other=g.find(x=>locKey(lastOf(x).loc)!==k);
-  pick("#snsel",other[0]);
+  const hist=sample.filter(r=>locKey(r.loc)===k);
+  pick("#citysel",k);
+  assert.deepEqual(serials(),inCity.slice(0,4));
+  assert.equal(rows(),Math.min(hist.length,10));
+  assert.equal(count(d.el("#log").innerHTML,new RegExp(`<div class="c-loc">${k[0].toUpperCase()+k.slice(1)}</div>`,"gi")),rows(),"semua baris log berlokasi di kota itu");
+  assert.match(d.el("#logsum").textContent,new RegExp(`History for: City ${k}`,"i"));assert.equal(d.el("#logsum").hidden,false);
+  reset();assert.equal(d.el("#logsum").hidden,true);
+});
+test("kota yang pernah dikunjungi alat tapi sekarang kosong: ada di dropdown, kartu kosong, log tetap menampilkan riwayat",()=>{
+  const now=new Set(g.map(x=>locKey(lastOf(x).loc))),past=[...new Set(sample.map(r=>locKey(r.loc)))].find(k=>!now.has(k));
+  assert.ok(past,"data demo punya kota yang hanya ada di riwayat");
+  assert.match(d.el("#citysel").innerHTML,new RegExp(`value="${past}">[^<]+\\(0\\)`));
+  pick("#citysel",past);
+  assert.match(d.el("#cards").innerHTML,/No tools match the filters right now/);
+  assert.ok(rows()>0,"riwayat kota itu tetap tampil di log");
+  reset();
+});
+test("filter PIC: log menampilkan semua catatan PIC itu",()=>{
+  const key=String(sample[0].id||sample[0].name).toLowerCase(),mine=sample.filter(r=>String(r.id||r.name).toLowerCase()===key);
+  pick("#picsel",key);
+  assert.equal(rows(),Math.min(mine.length,10));assert.match(d.el("#log-pager").innerHTML,new RegExp(`${mine.length} record`));
+  reset();
+});
+test("kombinasi filter tanpa catatan: kartu dan log memberi pesan kosong",()=>{
+  const cities=[...new Set(sample.map(r=>locKey(r.loc)))];let pair=null;
+  for(const [sn] of g){const c=cities.find(k=>!sample.some(r=>r.sn===sn&&locKey(r.loc)===k));if(c){pair=[sn,c];break}}
+  pick("#snsel",pair[0]);pick("#citysel",pair[1]);
   assert.match(d.el("#cards").innerHTML,/No tools match the filters/);assert.match(d.el("#log").innerHTML,/No matching records/);
   assert.match(d.el("#fsum").textContent,/Showing 0 of 6 tools/);
   reset();assert.equal(serials().length,4);

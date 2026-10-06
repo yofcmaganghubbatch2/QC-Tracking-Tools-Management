@@ -2,27 +2,26 @@ import {$,$$} from "../dom.js";
 import {state} from "../state.js";
 import {esc,cap} from "../logic/format.js";
 import {allowedSerials,locKey,picKey} from "../logic/gauges.js";
-import {EQUIPMENT} from "../config/master.js";
 import {renderLog} from "./log.js";
 
 const opts=(all,items)=>`<option value="">${all}</option>`+items.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join("");
 
-// Hitung berapa alat per kota atau per PIC (berdasarkan catatan terakhir tiap alat).
+// Daftar kota atau PIC untuk dropdown: semua yang pernah tercatat di log (supaya riwayat bisa difilter),
+// dengan jumlah alat yang SEKARANG ada di situ (berdasarkan catatan terakhir tiap alat). "(0)" = pernah ada, sekarang tidak ada alat.
 function tally(g,keyOf,nameOf){
   const m=new Map();
-  g.forEach(([,l])=>{const r=l[l.length-1],k=keyOf(r),e=m.get(k)||{name:nameOf(r),n:0};e.n++;m.set(k,e)});
+  [...state.data].sort((a,b)=>a.d.localeCompare(b.d)).forEach(r=>m.set(keyOf(r),{name:nameOf(r),n:0}));
+  g.forEach(([,l])=>{const e=m.get(keyOf(l[l.length-1]));if(e)e.n++});
   return [...m.entries()].sort((a,b)=>a[1].name.localeCompare(b[1].name)).map(([k,e])=>[k,`${e.name} (${e.n})`]);
 }
 
-// Isi dropdown Tool, City dan PIC (filter gabungan) serta filter alat pendukung milik log. Pilihan lama dipertahankan kalau masih ada.
+// Isi dropdown Tool, City dan PIC (filter gabungan di atas halaman). Pilihan lama dipertahankan kalau masih ada.
 export function fillFilters(g){
   const tools=g.map(([sn])=>[sn,sn]),cities=tally(g,r=>locKey(r.loc),r=>cap(locKey(r.loc))),pics=tally(g,picKey,r=>cap(r.name));
   const keep=(v,list)=>list.some(([k])=>k===v)?v:null;
-  const eqs=[...new Set([...EQUIPMENT,...state.data.flatMap(r=>r.eq||[])])],eqOpts=[["__none","No supporting equipment"],...eqs.map(e=>[e,e])];
-  state.eq=keep(state.eq,eqOpts);
   state.sel=keep(state.sel,tools);state.city=keep(state.city,cities);state.pic=keep(state.pic,pics);state.focus=keep(state.focus,tools);
-  $("#snsel").innerHTML=opts("All tools",tools);$("#citysel").innerHTML=opts("All cities",cities);$("#picsel").innerHTML=opts("All PICs",pics);$("#eqsel").innerHTML=opts("All equipment",eqOpts);
-  $("#snsel").value=state.sel||"";$("#citysel").value=state.city||"";$("#picsel").value=state.pic||"";$("#eqsel").value=state.eq||"";
+  $("#snsel").innerHTML=opts("All tools",tools);$("#citysel").innerHTML=opts("All cities",cities);$("#picsel").innerHTML=opts("All PICs",pics);
+  $("#snsel").value=state.sel||"";$("#citysel").value=state.city||"";$("#picsel").value=state.pic||"";
 }
 
 export const visibleSerials=()=>allowedSerials(state.g,state);
@@ -55,6 +54,4 @@ export function initFilters(onChange){
   on("#snsel","sel");on("#citysel","city");on("#picsel","pic");
   $("#freset").onclick=()=>{state.sel=state.city=state.pic=state.focus=null;state.page=0;state.logPage=0;onChange()};
   $$("#seg button").forEach(b=>b.onclick=()=>{$$("#seg button").forEach(x=>x.setAttribute("aria-pressed",x==b));state.role=b.dataset.r;state.logPage=0;moveSeg();renderLog()});
-  $("#eqsel").onchange=e=>{state.eq=e.target.value||null;state.logPage=0;renderLog()};
-  $("#q").oninput=e=>{state.query=e.target.value;state.logPage=0;renderLog()};
 }

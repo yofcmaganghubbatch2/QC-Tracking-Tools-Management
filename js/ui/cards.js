@@ -44,7 +44,8 @@ function cardHtml([sn,l],ref,n){
 ${bad?`<p class="note">Broken: ${esc(c.rem||"no remark")}</p>`:""}
 ${c.eq&&c.eq.length?`<p class="eqline"><span>${ship?"Sent with":"Arrived with"}</span>${chips(c.eq)}</p>`:""}
 ${last&&!last.ok?`<p class="note">Equipment mismatch. ${checkText(last)}</p>`:""}
-${recent}${full}${foot}</article>`;
+<div class="tlbox">${recent}${full}</div>
+${foot}</article>`;
 }
 
 // dir = "next" / "prev" untuk animasi geser saat pindah halaman.
@@ -54,7 +55,7 @@ export function renderCards(dir){
   per=cardsPerPage();
   const p=paginate(list,state.page,per);state.page=p.page;
   const el=$("#cards");el.className="cards"+(dir?" slide-"+dir:"");
-  const empty=state.data.length?"No tools match the filters.":"No record";
+  const empty=state.data.length?"No tools match the filters right now. The handover log below still shows past records.":"No record";
   el.innerHTML=p.items.map((c,i)=>cardHtml(c,ref,i)).join("")||`<div class="empty">${empty}</div>`;
   $$("#cards .days .big").forEach(e=>countUp(e,Number(e.textContent)||0));
   $$("#cards .card.open .tlscroll").forEach(s=>{s.scrollTop=s.scrollHeight});
