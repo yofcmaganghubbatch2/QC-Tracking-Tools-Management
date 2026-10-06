@@ -2,6 +2,7 @@ import {$,smooth} from "../dom.js";
 import {state} from "../state.js";
 import {esc,cap,fmt} from "../logic/format.js";
 import {paginate} from "../logic/paging.js";
+import {allowedSerials} from "../logic/gauges.js";
 import {renderPager,onPager} from "./pager.js";
 
 const SIZE=10; // baris per halaman
@@ -16,8 +17,10 @@ const rowHtml=r=>`<div class="row"><div class="c-date">${fmt(r.d)}</div><div cla
 
 export function renderLog(){
   const q=state.query.toLowerCase();
+  // Filter gabungan di atas halaman (Tool, City, PIC) juga menyaring log: hanya catatan alat yang lolos filter.
+  const act=state.sel||state.city||state.pic,allowed=act?allowedSerials(state.g,state):null;
   const rows=[...state.data].sort((a,b)=>b.d.localeCompare(a.d))
-    .filter(r=>(state.role=="all"||r.role==state.role)
+    .filter(r=>(!allowed||allowed.has(r.sn))&&(state.role=="all"||r.role==state.role)
       &&(!state.eq||(state.eq==="__none"?!(r.eq||[]).length:(r.eq||[]).includes(state.eq)))
       &&(!q||[r.name,r.loc,r.sn,r.id,(r.eq||[]).join(" ")].join(" ").toLowerCase().includes(q)));
   const p=paginate(rows,state.logPage,SIZE);state.logPage=p.page;

@@ -1,6 +1,6 @@
 /* peta */
 .mapbox{margin-top:0;padding:6px}
-.mapbox svg{display:block;width:100%;height:auto}
+.scope.mapbox svg{display:block;width:100%;height:auto} /* .scope.mapbox: menang atas ".scope svg{height:...}" milik gelombang hero di hero.css dan responsive.css */
 .land{fill:url(#dots);stroke:var(--mute);stroke-opacity:.5;stroke-width:1.2;stroke-linejoin:round}
 .eq{stroke:var(--line);stroke-width:1;stroke-dasharray:4 6}
 .eqt{font-size:10px;fill:var(--mute);opacity:.8}
@@ -31,4 +31,16 @@ select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid va
 #tip ul{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:1px solid var(--line)}
 #tip li+li{margin-top:6px}#tip .bad{color:var(--red);font-weight:500}
 .nr{font-size:18px;font-weight:700;fill:var(--mute)}
-.mapbox svg.narrow .cy,.mapbox svg.narrow .eqt{font-size:12px}
+.mapbox svg.narrow .eqt{font-size:11px}
+
+/* zoom di HP; di layar lebar tombol dan petunjuknya disembunyikan */
+.mapzoom,.maphint{display:none}
+.mn{position:sticky;left:0}
+@media (max-width:700px){
+  .scope.mapbox{overflow:auto;max-height:min(75vh,520px);-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:4px}
+  .mapbox svg.narrow .mk text{font-size:12px}
+  .mapbox svg.narrow .cy{font-size:11px}
+  .mapzoom{display:flex;flex-direction:column;gap:6px;position:absolute;right:10px;bottom:34px;z-index:6}
+  .mapzoom .btn{width:44px;height:44px;padding:0;font-size:1.4rem;line-height:1;display:grid;place-items:center;box-shadow:0 4px 14px rgba(13,43,53,.18)}
+  .maphint{display:block;margin:6px 4px 0;font-size:.82rem;color:var(--mute);text-align:center}
+}

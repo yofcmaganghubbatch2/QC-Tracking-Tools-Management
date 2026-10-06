@@ -7,7 +7,7 @@ export function group(data){const m={};[...data].sort((a,b)=>a.d.localeCompare(b
 // Kunci kota dan PIC untuk filter. Kota dicocokkan lewat daftar kota (misal "Kota Bandung" = "bandung").
 export const locKey=loc=>cityKey(loc)||String(loc||"").toLowerCase().trim();
 export const picKey=r=>String(r.id||r.name||"").toLowerCase();
-// Nomor seri yang lolos filter peta: alat terpilih dan/atau alat yang posisinya sekarang di kota terpilih.
-export function allowedSerials(g,{sel,city}){
-  return new Set(g.filter(([sn,l])=>(!sel||sn===sel)&&(!city||locKey(l[l.length-1].loc)===city)).map(([sn])=>sn));
+// Nomor seri yang lolos filter gabungan: alat terpilih, kota posisi sekarang, dan PIC terakhir (semuanya digabung).
+export function allowedSerials(g,{sel,city,pic}){
+  return new Set(g.filter(([sn,l])=>{const c=l[l.length-1];return (!sel||sn===sel)&&(!city||locKey(c.loc)===city)&&(!pic||picKey(c)===pic)}).map(([sn])=>sn));
 }

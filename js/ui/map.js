@@ -11,6 +11,17 @@ export const getTip=i=>TIPS[i];
 const FULL=[-10,-10,940,360];   // seluruh Indonesia
 const CENTER=[470,150];          // alat yang sedang dikirim "menunjuk" ke arah sini (tujuan belum diketahui)
 const ARC_LEN=95;
+const PX=1.15;                  // di HP: piksel layar per satuan peta (tulisan peta jadi terbaca; peta digeser dengan jari)
+let ZOOM=PX;                    // tombol + / - mengubah ini (0.8 sampai 2.4)
+const isNarrow=()=>matchMedia("(max-width:700px)").matches;
+
+// Tombol zoom di HP. redraw = fungsi yang menggambar ulang peta.
+export function initMapZoom(redraw){
+  $("#mapzoom").onclick=e=>{
+    const b=e.target.closest("button[data-z]");if(!b)return;
+    ZOOM=Math.min(2.4,Math.max(.8,Math.round((ZOOM+Number(b.dataset.z)*.35)*100)/100));redraw();
+  };
+}
 
 function tipHtml(gr){
   const c=gr.c,ship=c.role=="s";
@@ -43,7 +54,7 @@ function markerHtml(gr,p,t){
 
 // Di layar sempit, peta di-zoom ke area yang ada alatnya supaya tulisan tetap terbaca.
 function viewBox(pts){
-  if(!pts.length||!matchMedia("(max-width:700px)").matches)return FULL;
+  if(!pts.length||!isNarrow())return FULL;
   const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
   let x0=Math.min(...xs)-70,x1=Math.max(...xs)+90,y0=Math.min(...ys)-60,y1=Math.max(...ys)+60;
   if(x1-x0<420){const c=(x0+x1)/2;x0=c-210;x1=c+210}
@@ -74,13 +85,20 @@ export function renderMap(g){
     mk.push(markerHtml(gr,p,TIPS.length-1));
   });
 
-  const vb=viewBox(pts);
+  const vb=viewBox(pts),nar=isNarrow(),box=$("#map"),cw=Number(box.clientWidth)||360,ch=Number(box.clientHeight)||320;
+  // Di HP: peta dibuat lebih lebar dari layar dan bisa digeser (scroll) supaya tulisan dan penanda tidak mengecil.
+  const W=nar?Math.max(cw-12,Math.round(vb[2]*ZOOM)):0;
   const land=LAND.map(poly=>`<polygon class="land" points="${poly.map(q=>xy(q[0],q[1]).join(",")).join(" ")}"/>`).join("");
   const labels=[...cities.entries()].map(([k,p])=>{const L=LEFT.includes(k);
     return `<circle cx="${p[0]}" cy="${p[1]}" r="3" style="fill:var(--panel);stroke:var(--mute);stroke-width:1.5"/><text class="cy" x="${p[0]+(L?-8:8)}" y="${p[1]+14}" text-anchor="${L?"end":"start"}">${esc(cap(k))}</text>`}).join("");
   const note=missing.size?`<p class="mn">${missing.size} ${missing.size>1?"cities are":"city is"} not on the map yet: ${[...missing].map(x=>esc(cap(x))).join(", ")}. Add ${missing.size>1?"them":"it"} in js/config/cities.js.</p>`:"";
 
-  $("#map").innerHTML=`<svg viewBox="${vb.join(" ")}" class="${vb[2]<700?"narrow":""}" role="group" aria-label="Map of measurement tool positions in Indonesia"><defs><pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" style="fill:var(--teal);fill-opacity:.07"/><circle cx="4.5" cy="4.5" r="1.7" style="fill:var(--mute);fill-opacity:.4"/></pattern></defs>`
+  $("#map").innerHTML=`<svg viewBox="${vb.join(" ")}" class="${nar?"narrow":""}"${nar?` style="width:${W}px;max-width:none"`:""} role="group" aria-label="Map of measurement tool positions in Indonesia"><defs><pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" style="fill:var(--teal);fill-opacity:.07"/><circle cx="4.5" cy="4.5" r="1.7" style="fill:var(--mute);fill-opacity:.4"/></pattern></defs>`
    +`<line class="eq" x1="-10" x2="930" y1="120" y2="120"/><text class="eqt" x="922" y="114" text-anchor="end">equator</text>`
    +`${land}${arcs.join("")}${labels}${mk.join("")}${g.length?"":'<text class="nr" x="470" y="175" text-anchor="middle">No record</text>'}</svg>${note}`;
+  if(nar){ // mulai dari tengah area yang ada alatnya
+    const mean=i=>pts.length?pts.reduce((t,p)=>t+p[i],0)/pts.length:null;
+    const cx=mean(0)??vb[0]+vb[2]/2,cy=mean(1)??vb[1]+vb[3]/2,H=W*vb[3]/vb[2];
+    box.scrollLeft=Math.max(0,(cx-vb[0])/vb[2]*W-cw/2);box.scrollTop=Math.max(0,(cy-vb[1])/vb[3]*H-ch/2);
+  }
 }

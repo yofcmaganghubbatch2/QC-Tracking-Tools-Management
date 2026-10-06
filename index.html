@@ -16,6 +16,8 @@
 <link rel="stylesheet" href="css/log.css">
 <link rel="stylesheet" href="css/notice.css">
 <link rel="stylesheet" href="css/gate.css">
+<link rel="stylesheet" href="css/filters.css">
+<link rel="stylesheet" href="css/fx.css">
 <link rel="stylesheet" href="css/responsive.css">
 <link rel="stylesheet" href="css/motion.css">
 </head>
@@ -36,13 +38,24 @@ Keep tabs on tool status, current user, usage time, and transfer history all in 
   <div class="stats" id="stats"></div>
 </header>
 
+<section class="filters" id="filters" aria-label="Filters">
+  <div class="fhead"><b>Filters</b><span class="fsum" id="fsum" aria-live="polite"></span></div>
+  <div class="fgrid">
+    <label>Tool<select id="snsel" aria-label="Filter by serial number"><option value="">All tools</option></select></label>
+    <label>City<select id="citysel" aria-label="Filter by city"><option value="">All cities</option></select></label>
+    <label>PIC<select id="picsel" aria-label="Filter by PIC"><option value="">All PICs</option></select></label>
+    <button class="btn" id="freset" type="button" hidden>Reset</button>
+  </div>
+</section>
+
 <div class="notice" id="notice" role="status" hidden></div>
 
 <div class="bar" style="margin-top:34px"><h2>Route map</h2>
   <span style="color:var(--mute);font-size:.9rem"><i class="dt" style="background:var(--teal);margin-left:0"></i>with PIC<i class="dt" style="background:var(--amber)"></i>in transit<i class="dt" style="background:var(--red)"></i>broken</span>
-  <select id="citysel" aria-label="Filter by city"><option value="">All cities</option></select>
-  <select id="snsel" aria-label="Filter by serial number"><option value="">All tools</option></select></div>
-<div class="mapwrap"><div class="scope mapbox" id="map"></div><div id="tip" hidden></div></div>
+</div>
+<div class="mapwrap"><div class="scope mapbox" id="map"></div><div id="tip" hidden></div>
+  <div class="mapzoom" id="mapzoom"><button class="btn" type="button" data-z="1" aria-label="Zoom in">+</button><button class="btn" type="button" data-z="-1" aria-label="Zoom out">&minus;</button></div>
+  <p class="maphint">Drag the map to pan. Use + and &minus; to zoom.</p></div>
 
 <div class="bar">
   <h2>Current tool positions</h2>
@@ -51,7 +64,6 @@ Keep tabs on tool status, current user, usage time, and transfer history all in 
   <label style="color:var(--mute)">Count until <input type="date" id="ref"></label>
   <button class="btn" id="today">Today</button>
   <button class="btn" id="reload">Reload data</button>
-  <select id="picsel" aria-label="Filter by PIC"><option value="">All PICs</option></select>
 </div>
 <div class="cards" id="cards"></div>
 <div class="pager" id="cards-pager"></div>

@@ -1,0 +1,17 @@
+/* panel filter gabungan: Tool, City, PIC (berlaku untuk peta, kartu, dan log) */
+.filters{margin-top:18px;display:grid;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:20px;z-index:30;
+  background:color-mix(in srgb,var(--panel) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.fhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.fhead b{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:1.05rem}
+.fsum{color:var(--mute);font-size:.9rem}
+.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end}
+.fgrid label{display:grid;gap:4px;min-width:0;font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+.fgrid select{width:100%;font-size:.95rem;font-weight:500;letter-spacing:0;text-transform:none}
+.btn[hidden]{display:none}
+@media (min-width:900px){.filters{position:sticky;top:10px}}
+@media (max-width:760px){
+  .filters{padding:12px 14px}
+  .fgrid{grid-template-columns:1fr 1fr}
+  .fgrid label:first-child{grid-column:1/-1}
+  .fgrid .btn{grid-column:1/-1}
+}

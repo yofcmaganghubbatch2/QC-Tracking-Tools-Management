@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.1.0
+- Kartu alat dirombak: hanya 3 riwayat terbaru yang tampil. Klik kartu (atau tombol "All N records") untuk membuka riwayat lengkap di area scroll di dalam kartu. Kartu tidak lagi ikut memanjang mengikuti kartu tetangga yang riwayatnya panjang. Kartu yang dibuka tetap terbuka saat filter atau halaman berubah
+- Tombol "Show on map" di kartu menyorot alat di peta (mengganti perilaku klik kartu yang lama)
+- Filter jadi satu panel di atas halaman (Tool, City, PIC). Filter ini sekarang menyaring peta, kartu, dan handover log sekaligus (sebelumnya filter Tool hanya mengubah peta). Ada ringkasan jumlah alat dan tombol Reset. Panel menempel di atas saat scroll di layar lebar
+- Peta di HP: SVG tidak lagi dikecilkan. Peta dibuat lebih lebar dari layar, bisa digeser, ada tombol zoom + dan -, dan mulai dari tengah area yang ada alatnya. Memperbaiki aturan `.scope svg{height:...}` milik gelombang hero yang ikut memampatkan tinggi peta di layar sempit
+- Animasi dan tampilan: latar bergerak pelan, judul bergradasi, kotak statistik dan kartu muncul bertahap lalu terangkat saat disorot, angka hari menghitung naik, titik berkedip pada status "In transit", bagian halaman muncul saat di-scroll, baris log menyala saat disorot. Semuanya mati otomatis kalau perangkat memilih "reduce motion"
+- Judul hero dirapikan (rata tengah, subjudul baru) dan komentar di `main.js` tentang tanggal data demo dibetulkan
+- 62 tes otomatis (tes baru di `tests/ui-filters.test.mjs`)
+
 ## 3.0.0
 - Mengikuti Google Form baru: kolom tanggal jadi "Tools Departure or Arrival Date", nomor seri berupa pilihan tetap, ada "Supporting Equipment Included?", "Supporting Equipment" (checkbox), dan "Supporting Equipment Photo"
 - Alat pendukung (Ultrasonic Gel, Measuring Tape, Tailor Tape, Cutter, Caliper, Tape) dicatat sebagai isi tiap pengiriman, tampil sebagai label di kartu, garis waktu, log, dan tooltip peta. Posisi tiap alat pendukung tidak dilacak karena tidak punya nomor seri
