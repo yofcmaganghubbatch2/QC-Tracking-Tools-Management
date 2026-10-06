@@ -42,7 +42,8 @@ export function pick(sn){state.focus=state.focus==sn?null:sn;applyMapFilter()}
 // Ringkasan di panel filter: "Showing 2 of 6 tools" dan tombol Reset (hanya muncul kalau ada filter aktif).
 export function updateSummary(){
   const n=state.g.length,act=!!(state.sel||state.city||state.pic);
-  $("#fsum").textContent=n?(act?`Showing ${visibleSerials().size} of ${n} tools`:`${n} tools`):"";
+  const el=$("#fsum"),txt=n?(act?`Showing ${visibleSerials().size} of ${n} tools`:`${n} tools`):"";
+  if(el.textContent!==txt){el.textContent=txt;el.classList.remove("bump");void el.offsetWidth;el.classList.add("bump")} // animasi kecil saat angka berubah
   $("#freset").hidden=!act;
 }
 

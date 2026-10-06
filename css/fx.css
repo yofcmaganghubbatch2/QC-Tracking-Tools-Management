@@ -3,6 +3,10 @@
 @keyframes drift{to{transform:translate3d(4%,3%,0) scale(1.08)}}
 @keyframes shine{to{background-position:100% 0}}
 @keyframes blink{50%{opacity:.25}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{to{background-position:-300% 0}}
+@keyframes bump{40%{transform:scale(1.14);color:var(--teal)}}
+@keyframes mkpop{from{transform:scale(0);opacity:0}}
 
 /* latar yang bergerak pelan */
 body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
@@ -50,3 +54,41 @@ select:hover,input:hover{border-color:var(--teal)}
 /* bagian halaman muncul saat discroll (kelas dipasang oleh js/main.js) */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
+
+/* garis progres scroll di atas halaman (diisi js/ui/fx.js) */
+.progress{position:fixed;top:0;left:0;width:100%;height:3px;z-index:60;pointer-events:none;transform-origin:left;transform:scaleX(var(--p,0));background:linear-gradient(90deg,var(--teal),var(--amber))}
+
+/* kartu: cahaya sorot yang mengikuti kursor, dan miring tipis (nilai --rx/--ry/--mx/--my diisi js/ui/fx.js) */
+.card:hover{transform:perspective(900px) translateY(-4px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:inherit;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--teal) 15%,transparent),transparent 70%)}
+.card:hover::after{opacity:1}
+
+/* judul bagian: garis warna yang memanjang saat bagian muncul */
+.bar h2{position:relative}
+.bar h2::after{content:"";position:absolute;left:0;bottom:-7px;height:3px;width:0;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--amber));transition:width .9s cubic-bezier(.2,.7,.2,1) .25s}
+.bar.in h2::after{width:46px}
+
+/* tanda "live" di gelombang hero */
+.scope .tag::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);margin-right:7px;animation:blink 1.4s ease-in-out infinite}
+
+/* penanda peta muncul satu per satu */
+.mkin{transform-box:fill-box;transform-origin:center;animation:mkpop .55s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(var(--n,0)*90ms + .5s)}
+
+/* kerangka kartu saat data dimuat */
+.skel{min-height:300px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(100deg,var(--panel) 30%,color-mix(in srgb,var(--teal) 10%,var(--panel)) 50%,var(--panel) 70%);background-size:300% 100%;animation:shimmer 1.4s linear infinite}
+
+/* angka ringkasan berdenyut kecil saat berubah */
+.fsum.bump{animation:bump .55s ease}
+
+/* baris log masuk bergantian */
+.log .row:nth-child(2):not(.head){animation-delay:0ms}
+.log .row:nth-child(3):not(.head){animation-delay:35ms}
+.log .row:nth-child(4):not(.head){animation-delay:70ms}
+.log .row:nth-child(5):not(.head){animation-delay:105ms}
+.log .row:nth-child(6):not(.head){animation-delay:140ms}
+.log .row:nth-child(7):not(.head){animation-delay:175ms}
+.log .row:nth-child(8):not(.head){animation-delay:210ms}
+.log .row:nth-child(9):not(.head){animation-delay:245ms}
+.log .row:nth-child(10):not(.head){animation-delay:280ms}
+.log .row:nth-child(11):not(.head){animation-delay:315ms}

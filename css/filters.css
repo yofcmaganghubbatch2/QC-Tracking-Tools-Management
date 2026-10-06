@@ -7,11 +7,17 @@
 .fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end}
 .fgrid label{display:grid;gap:4px;min-width:0;font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
 .fgrid select{width:100%;font-size:.95rem;font-weight:500;letter-spacing:0;text-transform:none}
+.fbtns{display:flex;gap:8px;align-items:flex-end}
 .btn[hidden]{display:none}
+#reload::before{content:"\21BB";display:inline-block;margin-right:7px;font-weight:800}
+#reload:disabled{opacity:.7;cursor:progress}
+#reload:disabled::before{animation:spin .8s linear infinite}
+.fsum{display:inline-block;transform-origin:right center}
 @media (min-width:900px){.filters{position:sticky;top:10px}}
 @media (max-width:760px){
   .filters{padding:12px 14px}
   .fgrid{grid-template-columns:1fr 1fr}
   .fgrid label:first-child{grid-column:1/-1}
-  .fgrid .btn{grid-column:1/-1}
+  .fbtns{grid-column:1/-1}
+  .fbtns .btn{flex:1}
 }

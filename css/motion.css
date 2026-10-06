@@ -1,2 +1,3 @@
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}.wave{stroke-dashoffset:0}.sweep{display:none}.trav{display:none}}
 @media (prefers-reduced-motion:reduce){body::before,.hero h1,.pill.go::before{animation:none!important}.reveal{opacity:1!important;transform:none!important;transition:none!important}.card:hover,.stat:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){.skel,.fsum.bump,.mkin,#reload:disabled::before,.scope .tag::before{animation:none!important}.progress,.bar h2::after{transition:none}.card:hover{transform:none}}

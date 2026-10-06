@@ -6,6 +6,7 @@ import {loadData,AuthError,getCode,setCode,clearCode} from "./data/source.js";
 import {renderStats} from "./ui/stats.js";
 import {renderCards,initCards,relayoutCards} from "./ui/cards.js";
 import {renderMap,initMapZoom} from "./ui/map.js";
+import {initFx} from "./ui/fx.js";
 import {renderLog,initLog} from "./ui/log.js";
 import {initTooltip} from "./ui/tooltip.js";
 import {fillFilters,applyMapFilter,initFilters,moveSeg,updateSummary} from "./ui/filters.js";
@@ -38,7 +39,7 @@ function render(){
 
 async function load(){
   const btn=$("#reload");btn.disabled=true;btn.textContent="Loading...";clearNotice();
-  if(!state.data.length)$("#cards").innerHTML='<div class="empty">Loading...</div>';
+  if(!state.data.length)$("#cards").innerHTML='<div class="skel" role="status" aria-label="Loading"></div>'.repeat(3);
   try{
     const {rows,label,skipped}=await loadData();
     state.data=rows;state.source=label;setRef();render();
@@ -54,10 +55,9 @@ async function load(){
 }
 
 function bind(){
-  initFilters(refresh);initCards();initLog();initTooltip();initMapZoom(redrawMap);initReveal();
+  initFilters(refresh);initCards();initLog();initTooltip();initMapZoom(redrawMap);initReveal();initFx();
   initGate(code=>{setCode(code);load()});
   $("#ref").onchange=()=>renderCards();
-  $("#today").onclick=()=>{$("#ref").value=today();renderCards()};
   $("#reload").onclick=load;
   requestAnimationFrame(moveSeg);
   let t;addEventListener("resize",()=>{moveSeg();clearTimeout(t);t=setTimeout(relayoutCards,150)});

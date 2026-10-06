@@ -1,8 +1,10 @@
-import test from "node:test";import assert from "node:assert/strict";
+import test from "node:test";import assert from "node:assert/strict";import fs from "node:fs";
 import {install,wait,count} from "./helpers/fake-dom.mjs";
 import {sample,g,lastOf} from "./helpers/expect.mjs";
 import {locKey} from "../js/logic/gauges.js";
 import {state} from "../js/state.js";
+import {handoverChecks,countMismatches} from "../js/logic/equipment.js";
+import {renderLog} from "../js/ui/log.js";
 const d=install({search:"?demo=1",fetch:async()=>({ok:true,status:200,json:async()=>sample})});
 await import("../js/main.js");await wait(150);
 
@@ -75,4 +77,41 @@ test("tombol Show on map menyorot alat, bukan menyaring",()=>{
 });
 test("peta di HP: lebih lebar dari layar supaya bisa digeser, ada kelas narrow",()=>{
   assert.match(d.el("#map").innerHTML,/<svg viewBox="[-\d. ]+" class="narrow" style="width:\d+px;max-width:none"/);
+});
+test("tombol Today dihapus; Reload data ada di panel filter, bukan di bagian Current tool positions",()=>{
+  const html=fs.readFileSync(new URL("../index.html",import.meta.url),"utf8");
+  assert.ok(!/id="today"/.test(html));
+  const panel=html.split('<section class="filters"')[1].split("</section>")[0];
+  assert.match(panel,/id="reload"/);
+  assert.ok(!html.split('<h2>Current tool positions</h2>')[1].split('id="cards"')[0].includes('id="reload"'));
+});
+test("penanda peta dibungkus .mkin supaya bisa beranimasi tanpa merusak posisi (translate)",()=>{
+  const html=d.el("#map").innerHTML;
+  assert.equal(count(html,/class="mkin"/g),count(html,/class="mk"/g));
+});
+test("log: catatan penerima memuat keterangan kelengkapan seperti di kartu (Not received / Extra / Complete)",()=>{
+  const found={};
+  for(const [sn,l] of g){handoverChecks(l).forEach((c,i)=>{if(!c)return;const k=c.ok?"ok":"bad";if(!found[k])found[k]=[sn,l[i],c]})}
+  assert.ok(found.ok&&found.bad,"data demo punya serah terima yang lengkap dan yang tidak");
+  for(const [k,[sn,r,c]] of Object.entries(found)){
+    pick("#snsel",sn);pick("#citysel",locKey(r.loc));
+    const html=d.el("#log").innerHTML;
+    if(k==="bad"){
+      if(c.missing.length)assert.match(html,new RegExp(`Not received: ${c.missing[0]}`));
+      if(c.extra.length)assert.match(html,new RegExp(`Extra: ${c.extra[0]}`));
+    }else assert.match(html,/Complete, matches what was sent/);
+    assert.ok(count(html,/class="eqwarn"|class="eqok"/g)<=count(html,/class="chip r"/g),"keterangan hanya di baris penerima");
+    reset();
+  }
+});
+test("keterangan 'Not received/Extra' di log (semua halaman, semua alat) = angka Equipment mismatches di statistik",()=>{
+  let seen=0;
+  for(const [sn] of g){
+    pick("#snsel",sn);
+    const pages=Math.ceil(sample.filter(r=>r.sn===sn).length/10);
+    for(let p=0;p<pages;p++){state.logPage=p;renderLog();seen+=count(d.el("#log").innerHTML,/class="eqwarn"/g)}
+  }
+  reset();
+  assert.ok(countMismatches(g)>0);
+  assert.equal(seen,countMismatches(g));
 });

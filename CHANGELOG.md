@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.4.0
+- Handover log kini memuat keterangan kelengkapan alat pendukung seperti di kartu. Baris penerima menampilkan "Not received: ..." (kurang), "Extra: ..." (lebih), atau "Complete, matches what was sent". Hasilnya dihitung dari riwayat lengkap tiap alat sehingga tidak berubah saat filter dipakai, dan jumlahnya sama dengan angka Equipment mismatches di statistik
+- 68 tes otomatis
+
+## 3.3.0
+- Tombol "Today" dihapus. Tombol "Reload data" pindah dari bagian Current tool positions ke panel filter (ikon berputar saat memuat)
+- Animasi tambahan: kartu miring tipis dan bercahaya mengikuti kursor (hanya perangkat dengan mouse), garis progres scroll di atas halaman, garis warna di bawah judul bagian yang memanjang saat muncul, penanda peta muncul satu per satu, titik "live" berkedip di gelombang hero, baris log masuk bergantian, ringkasan filter berdenyut saat berubah, dan kerangka kartu berkilau saat data dimuat. Semuanya mengikuti "reduce motion"
+- 66 tes otomatis
+
 ## 3.2.0
 - Semua kartu alat kini satu ukuran (layar lebar). Riwayat lengkap yang dibuka menimpa area daftar terbaru, jadi tinggi kartu tidak berubah dan kartu tetangga tidak ikut bergeser. Di HP (1 kolom) tinggi mengikuti isi
 - Handover log mengikuti filter di atas halaman sebagai **riwayat**: Tool, City, dan PIC dicocokkan ke tiap catatan, bukan ke posisi alat sekarang. Memilih Denpasar menampilkan semua catatan di Denpasar. Ada keterangan filter di bawah judul log

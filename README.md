@@ -1,4 +1,4 @@
-# Tracking QC Measurement Tools (v3.2)
+# Tracking QC Measurement Tools (v3.4)
 
 Dashboard pelacak alat ukur QC: posisi alat sekarang, PIC, lama di PIC, peta rute, dan log serah terima.
 Data diambil langsung dari Google Sheet lewat Google Apps Script dan fungsi server di Vercel. Teks tampilan berbahasa Inggris.
@@ -58,10 +58,10 @@ Nomor seri dan daftar alat pendukung resmi ada di `js/config/master.js`. Kalau p
 Alat pendukung tidak punya nomor seri, jadi yang dicatat adalah **isi tiap pengiriman**, bukan posisi tiap alat. Pengirim dan penerima sama-sama mencentang apa yang dikirim atau diterima. Kalau berbeda, kartu menampilkan peringatan ("Not received: ..." atau "Extra: ...") dan statistik "Equipment mismatches" bertambah. Jawaban "No" berarti tidak ada alat pendukung.
 
 ## Filter dan halaman
-- **Panel filter di atas halaman** (Tool, City, PIC) satu kesatuan. Ketiganya digabung (AND) dan berlaku untuk peta, kartu, dan handover log. Ada ringkasan "Showing 2 of 6 tools" dan tombol Reset (muncul kalau ada filter aktif). Di layar lebar panel ikut menempel di atas saat di-scroll. Kotak statistik di hero tetap menghitung seluruh alat.
+- **Panel filter di atas halaman** (Tool, City, PIC) satu kesatuan. Ketiganya digabung (AND) dan berlaku untuk peta, kartu, dan handover log. Ada ringkasan "Showing 2 of 6 tools", tombol Reset (muncul kalau ada filter aktif), dan tombol **Reload data** (memuat ulang data dari sheet). Bagian Current tool positions hanya punya kotak "Count until" (tanggal acuan penghitung hari). Di layar lebar panel ikut menempel di atas saat di-scroll. Kotak statistik di hero tetap menghitung seluruh alat.
 - **Beda arti untuk kartu/peta dan log:** kartu dan peta menunjukkan keadaan **sekarang** (City = kota posisi alat sekarang, PIC = pemegang atau pengirim terakhir). Handover log menunjukkan **riwayat**: semua catatan yang kotanya, PIC-nya, atau alatnya cocok. Jadi memilih City = Denpasar menampilkan semua alat yang pernah tercatat di Denpasar. Dropdown City dan PIC berisi semua yang pernah ada di log; angka di kurung = jumlah alat yang sekarang ada di situ (0 = pernah ada, sekarang tidak ada alat).
 - Current tool positions: kartu berhalaman, jumlah per halaman mengikuti lebar layar (kolom x 2 baris). **Semua kartu satu ukuran** di layar lebar, dan tinggi kartu tidak berubah saat riwayat dibuka. Tiap kartu menampilkan 3 riwayat terbaru. Klik kartu (atau tombol "All N records") untuk membuka riwayat lengkap di area yang bisa di-scroll. Tombol **Show on map** menyorot alat itu di peta (hanya menyorot, tidak menyaring).
-- Handover log: satu-satunya kontrol miliknya adalah tombol **All / Senders / Recipients**, 10 baris per halaman. Di bawah judul tampil keterangan filter yang sedang berlaku.
+- Handover log: satu-satunya kontrol miliknya adalah tombol **All / Senders / Recipients**, 10 baris per halaman. Di bawah judul tampil keterangan filter yang sedang berlaku. Di kolom Equipment, baris **penerima** yang didahului baris pengirim alat yang sama diberi keterangan kelengkapan seperti di kartu: "Not received: ..." (dikirim tapi tidak dicentang penerima), "Extra: ..." (dicentang penerima tapi tidak dikirim), atau "Complete" kalau cocok. Jumlah keterangan ini sama dengan angka Equipment mismatches di statistik, dan tidak terpengaruh filter.
 - Peta di HP: lebih lebar dari layar supaya tulisan terbaca. Geser dengan jari, tombol + dan - untuk zoom.
 - Ubah jumlah baris log di `SIZE` pada `js/ui/log.js`, jumlah riwayat kartu yang langsung tampil di `KEEP` pada `js/ui/cards.js`, dan jumlah baris kartu di `cardsPerPage()` pada `js/ui/cards.js`.
 

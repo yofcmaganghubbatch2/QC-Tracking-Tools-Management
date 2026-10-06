@@ -14,3 +14,6 @@ footer{margin-top:26px;color:var(--mute);font-size:.88rem}
 .c-eq{display:flex;flex-wrap:wrap;gap:4px;align-items:center;color:var(--mute)}
 .logsum{margin:-2px 0 12px;color:var(--mute);font-size:.9rem}
 .logsum[hidden]{display:none}
+.c-eq .eqwarn,.c-eq .eqok{flex-basis:100%;margin-top:2px;font-size:.78rem;font-weight:500}
+.c-eq .eqwarn span{display:block}
+.c-eq .eqok{color:var(--teal)}

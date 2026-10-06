@@ -49,7 +49,7 @@ function markerHtml(gr,p,t){
   const c=gr.c,m=gr.items.length,sns=gr.items.map(i=>esc(i.sn)).join(" ");
   const bad=gr.items.some(i=>i.c.cond=="broken");
   const col=bad?"var(--red)":c.role=="s"?"var(--amber)":"var(--teal)";
-  return `<g class="mk" tabindex="0" data-t="${t}" data-sns="${sns}" transform="translate(${p[0]} ${p[1]})"><circle r="15" style="fill:transparent"/><circle class="ring" r="7" style="fill:${col}"/><circle r="${m>1?8:5.5}" style="fill:${col};stroke:var(--panel);stroke-width:2"/>${m>1?`<text class="cnt" y="3.5">${m}</text>`:""}</g>`;
+  return `<g class="mk" tabindex="0" data-t="${t}" data-sns="${sns}" transform="translate(${p[0]} ${p[1]})"><circle r="15" style="fill:transparent"/><g class="mkin" style="--n:${t}"><circle class="ring" r="7" style="fill:${col}"/><circle r="${m>1?8:5.5}" style="fill:${col};stroke:var(--panel);stroke-width:2"/>${m>1?`<text class="cnt" y="3.5">${m}</text>`:""}</g></g>`;
 }
 
 // Di layar sempit, peta di-zoom ke area yang ada alatnya supaya tulisan tetap terbaca.
