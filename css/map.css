@@ -23,12 +23,12 @@
 @keyframes fadein{to{opacity:1}}
 .mn{margin:6px 12px 8px;color:var(--mute);font-size:.85rem}
 select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;max-width:100%}
-#tip{position:absolute;z-index:5;width:230px;transform:translate(-50%,calc(-100% - 16px));background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:.86rem;line-height:1.35;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.22);animation:fadein .18s ease both}
+#tip{position:absolute;z-index:5;width:250px;transform:translate(-50%,calc(-100% - 16px));background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:.86rem;line-height:1.35;box-shadow:0 12px 32px rgba(0,0,0,.22);animation:fadein .18s ease both}
 #tip.below{transform:translate(-50%,16px)}
 #tip[hidden]{display:none}
 #tip b{font-size:1rem;display:block}#tip small{display:block;color:var(--mute)}
 #tip p{margin:8px 0 0}#tip p.go{color:var(--amber-ink)}
-#tip ul{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:1px solid var(--line)}
+#tip ul{list-style:none;margin:0;padding:0}
 #tip li+li{margin-top:6px}#tip .bad{color:var(--red);font-weight:500}
 .nr{font-size:18px;font-weight:700;fill:var(--mute)}
 .mapbox svg.narrow .eqt{font-size:11px}
@@ -45,3 +45,14 @@ select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid va
   .maphint{display:block;margin:6px 4px 0;font-size:.82rem;color:var(--mute);text-align:center}
 }
 .dt.ring{background:transparent;border:2px dashed var(--amber);box-sizing:border-box}
+
+/* kartu info penanda: daftar alat di area scroll, bisa di-pin dengan klik */
+#tip .tiphead{padding-right:22px}
+#tip .tipscroll{margin-top:8px;padding-top:8px;border-top:1px solid var(--line);max-height:min(210px,34vh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#tip li+li{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+#tip .to{font-weight:700;color:var(--amber-ink)}
+#tip .nodest{color:var(--mute);font-style:italic}
+#tip .tipx{display:none;position:absolute;top:8px;right:8px;width:26px;height:26px;border:0;border-radius:50%;background:color-mix(in srgb,var(--mute) 14%,transparent);color:var(--ink);font-size:1.1rem;line-height:1;cursor:pointer;place-items:center}
+#tip.pinned .tipx{display:grid}
+#tip.pinned{box-shadow:0 0 0 2px var(--teal),0 12px 32px rgba(0,0,0,.22)}
+.mk:focus{outline:none}

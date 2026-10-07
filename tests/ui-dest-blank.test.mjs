@@ -9,8 +9,8 @@ await import("../js/main.js");await wait(150);
 
 test("tujuan kosong: peta memberi keterangan 'destination not set', tidak error",()=>{
   const html=d.el("#map").innerHTML;
-  assert.equal(count(html,/destination not set/g),3);
-  assert.equal(count(html,/class="endn"/g),4);
+  assert.equal(count(html,/destination not set/g),1,"tujuan kosong berbagi satu busur pendek");
+  assert.equal(count(html,/class="endn"/g),2,"satu busur untuk tujuan kosong, satu untuk Atlantis");
 });
 test("tujuan yang kotanya belum dikenal: ditampilkan sebagai teks dan dilaporkan di catatan peta",()=>{
   const html=d.el("#map").innerHTML;

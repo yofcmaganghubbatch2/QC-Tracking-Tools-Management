@@ -23,13 +23,20 @@ export function initMapZoom(redraw){
   };
 }
 
+const CLOSE='<button class="tipx" type="button" aria-label="Close">&times;</button>';
+const equip=c=>c.eq&&c.eq.length?`<small>+ ${c.eq.map(esc).join(", ")}</small>`:"";
+const broken=c=>c.cond=="broken"?` <span class="bad">broken: ${esc(c.rem||"no remark")}</span>`:"";
+
+// Kartu info sebuah penanda. Daftar alat ada di area yang bisa di-scroll (penting kalau alatnya banyak).
+// Penanda alat yang dikirim = semua alat yang dikirim dari kota yang sama (beda tujuan tetap satu penanda).
 function tipHtml(gr){
-  const c=gr.c,ship=c.role=="s";
-  const status=ship
-    ?`<p class="go">Sent ${fmt(c.d)} from ${esc(cap(c.loc))}${c.dest?` to <strong>${esc(cap(c.dest))}</strong>`:""}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}. ${c.dest?"":"Destination not set. "}Waiting for the recipient to confirm.</p>`
-    :`<p>Holding since ${fmt(c.d)}</p>`;
-  const items=gr.items.map(i=>`<li>${ITEM}<br><strong>${esc(i.sn)}</strong>${i.c.eq&&i.c.eq.length?`<br><small>+ ${i.c.eq.map(esc).join(", ")}</small>`:""}${i.c.cond=="broken"?` <span class="bad">broken: ${esc(i.c.rem||"no remark")}</span>`:""}</li>`).join("");
-  return `<b>${esc(cap(c.name))}</b><small>ID ${esc(c.id)}, ${esc(cap(c.loc))}</small>${status}<ul>${items}</ul>`;
+  const c=gr.c,m=gr.items.length,count=`${m} ${ITEM}${m>1?"s":""}`;
+  if(c.role=="s"){
+    const items=gr.items.map(({sn,c:r})=>`<li><strong>${esc(sn)}</strong> ${r.dest?`<span class="to">&rarr; ${esc(cap(r.dest))}</span>`:`<span class="nodest">destination not set</span>`}${broken(r)}<small>${esc(cap(r.name))}, sent ${fmt(r.d)}</small>${r.ship||r.trk?`<small>${[r.ship?esc(r.ship):"",r.trk?"tracking "+esc(r.trk):""].filter(Boolean).join(", ")}</small>`:""}${equip(r)}</li>`).join("");
+    return `<div class="tiphead"><b>In transit from ${esc(cap(c.loc))}</b><small>${count}</small></div><p class="go">Waiting for the recipient${m>1?"s":""} to confirm.</p><div class="tipscroll"><ul>${items}</ul></div>${CLOSE}`;
+  }
+  const items=gr.items.map(i=>`<li><strong>${esc(i.sn)}</strong>${broken(i.c)}${equip(i.c)}</li>`).join("");
+  return `<div class="tiphead"><b>${esc(cap(c.name))}</b><small>ID ${esc(c.id)}, ${esc(cap(c.loc))}</small><small>${count}</small></div><p>Holding since ${fmt(c.d)}</p><div class="tipscroll"><ul>${items}</ul></div>${CLOSE}`;
 }
 
 function arcEnd(p){
@@ -85,20 +92,27 @@ export function renderMap(g){
     l.forEach(r=>{const k=cityKey(r.loc);if(k)cities.set(k,xy(CITY[k][0],CITY[k][1]))});
     const c=l[l.length-1],p=ll(c.loc);
     if(!p){missing.add(c.loc||"(kosong)");return}
-    // Alat dikirim: satu penanda per alat. Alat sudah sampai: satu penanda per PIC per kota.
-    const k=c.role=="s"?"t|"+sn:"h|"+c.id+"|"+cityKey(c.loc);
+    // Alat dikirim: satu penanda per kota pengirim (diberi angka). Alat sudah sampai: satu penanda per PIC per kota.
+    const k=c.role=="s"?"t|"+cityKey(c.loc):"h|"+c.id+"|"+cityKey(c.loc);
     (groups[k]=groups[k]||{c,p,items:[]}).items.push({sn,c});
   });
 
   Object.values(groups).forEach(gr=>{
     const key=cityKey(gr.c.loc),n=seen[key]=(seen[key]||0)+1;
-    const p=[gr.p[0],gr.p[1]+(n-1)*16]; // dua PIC di kota yang sama: geser sedikit
+    const p=[gr.p[0],gr.p[1]+(n-1)*16]; // dua penanda di kota yang sama (misal alat dikirim dan alat dipegang PIC): geser sedikit
     pts.push(p);
     if(gr.c.role=="s"){
-      const to=destOf(gr.c,p);
-      if(to.k)cities.set(to.k,to.q);               // kota tujuan ikut digambar dan diberi nama
-      if(to.unknown)missing.add(to.unknown);        // tujuan yang belum ada di js/config/cities.js
-      arcs.push(arcHtml(esc(gr.items[0].sn),p,arcs.length,to));pts.push(to.q||arcEnd(p).e);
+      // Satu busur per tujuan yang berbeda (alat dengan tujuan sama berbagi satu busur; tujuan kosong berbagi satu busur pendek).
+      const byDest=new Map();
+      gr.items.forEach(({sn,c})=>{
+        const to=destOf(c,p),key=to.k?"k|"+to.k:"x|"+to.label.toLowerCase(),e=byDest.get(key)||{to,sns:[]};
+        e.sns.push(sn);byDest.set(key,e);
+      });
+      byDest.forEach(({to,sns})=>{
+        if(to.k)cities.set(to.k,to.q);              // kota tujuan ikut digambar dan diberi nama
+        if(to.unknown)missing.add(to.unknown);       // tujuan yang belum ada di js/config/cities.js
+        arcs.push(arcHtml(sns.map(esc).join(" "),p,arcs.length,to));pts.push(to.q||arcEnd(p).e);
+      });
     }
     TIPS.push(tipHtml(gr));
     mk.push(markerHtml(gr,p,TIPS.length-1));

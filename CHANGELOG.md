@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.6.0
+- Peta: alat yang dikirim dari kota yang sama digabung jadi satu titik berangka (sebelumnya satu titik per alat yang saling menumpuk). Busur digambar satu per tujuan berbeda: alat dengan tujuan sama berbagi satu busur, dan semua yang tujuannya kosong berbagi satu busur pendek "destination not set" (sebelumnya tulisan ini bertumpuk lima kali)
+- Kartu info titik peta memuat daftar semua alatnya di area yang bisa di-scroll: nomor seri, tujuan, pengirim dan tanggal kirim, ekspedisi dan resi, alat pendukung, dan status rusak. Judulnya "In transit from Jakarta" dengan jumlah alat
+- Kartu bisa di-pin: klik (atau Enter/tap) membuat kartu tetap terbuka supaya bisa di-scroll, tutup dengan x, klik di luar, atau Esc. Dengan hover saja kartu tetap muncul sementara dan kursor boleh berpindah ke dalamnya. Di HP kartu ditutup saat peta digeser
+- Kotak outline hitam di titik setelah diklik dihilangkan
+- 84 tes otomatis
+
 ## 3.5.0
 - Kolom baru **Destination (Blank if as Recipient)** dari Google Form dibaca sebagai `dest` (hanya untuk pengirim). `apps-script/Code.gs` tidak berubah karena hanya membuang email dan foto
 - Peta: alat yang sedang dikirim digambar sebagai busur dari kota pengirim ke kota tujuan, dengan cincin putus-putus dan nama kota tujuan. Tujuan kosong atau kota belum dikenal ditulis jelas di ujung busur, dan kota yang belum ada di `cities.js` dilaporkan di catatan peta. Tooltip memuat tujuan, legenda menambah "destination"
