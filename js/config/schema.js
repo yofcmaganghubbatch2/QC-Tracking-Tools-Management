@@ -14,6 +14,7 @@ export const COLUMNS={
   rem:["remarks"],
   ship:["shipping"],
   trk:["tracking"],
+  dest:["destination"],
   eqInc:["supporting equipment included"],
   eq:["=supporting equipment"]
 };

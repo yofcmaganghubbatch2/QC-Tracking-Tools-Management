@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.5.0
+- Kolom baru **Destination (Blank if as Recipient)** dari Google Form dibaca sebagai `dest` (hanya untuk pengirim). `apps-script/Code.gs` tidak berubah karena hanya membuang email dan foto
+- Peta: alat yang sedang dikirim digambar sebagai busur dari kota pengirim ke kota tujuan, dengan cincin putus-putus dan nama kota tujuan. Tujuan kosong atau kota belum dikenal ditulis jelas di ujung busur, dan kota yang belum ada di `cities.js` dilaporkan di catatan peta. Tooltip memuat tujuan, legenda menambah "destination"
+- Kartu ("Sent from X to Y via ..."), riwayat kartu ("sent, X → Y"), dan kolom Location di handover log memuat tujuan. Tujuan kosong tampil "destination not set" / "not set"
+- Data demo (`sample.json`) dan `samples/QC_Measurement_Tools_sample.xlsx` ikut diberi kolom Destination
+- 80 tes otomatis, termasuk tes dengan header persis dari file xlsx terbaru, 100 baris kosong, dan Code.gs yang tidak diubah
+
 ## 3.4.0
 - Handover log kini memuat keterangan kelengkapan alat pendukung seperti di kartu. Baris penerima menampilkan "Not received: ..." (kurang), "Extra: ..." (lebih), atau "Complete, matches what was sent". Hasilnya dihitung dari riwayat lengkap tiap alat sehingga tidak berubah saat filter dipakai, dan jumlahnya sama dengan angka Equipment mismatches di statistik
 - 68 tes otomatis

@@ -2,11 +2,11 @@ import test from "node:test";import assert from "node:assert/strict";import fs f
 import {createHandler} from "../lib/handler.js";
 
 const sample=JSON.parse(fs.readFileSync(new URL("../js/data/sample.json",import.meta.url),"utf8"));
-const HEAD=["Timestamp","Email Address","Full Name","Employee ID","Location","As Sender or Recipient","Ultrasonic Thickness Gauge Serial Number","Ultrasonic Thickness Gauge Condition","Remarks if Broken (Blank if in Good Condition)","Ultrasonic Thickness Gauge Photo","Supporting Equipment Included?","Supporting Equipment","Supporting Equipment Photo","Tools Departure or Arrival Date","Shipping Service Company (Blank if as Recipient)","Tracking Number (Blank if as Recipient)"];
+const HEAD=["Timestamp","Email Address","Full Name","Employee ID","Location","As Sender or Recipient","Ultrasonic Thickness Gauge Serial Number","Ultrasonic Thickness Gauge Condition","Remarks if Broken (Blank if in Good Condition)","Ultrasonic Thickness Gauge Photo","Supporting Equipment Included?","Supporting Equipment","Supporting Equipment Photo","Tools Departure or Arrival Date","Shipping Service Company (Blank if as Recipient)","Tracking Number (Blank if as Recipient)","Destination (Blank if as Recipient)"];
 const DATE_COL=13;
 const serial=d=>Math.round((Date.parse(d+"T00:00:00Z")-Date.parse("1899-12-30T00:00:00Z"))/864e5);
 // seperti jawaban Sheets API dengan UNFORMATTED_VALUE: tanggal berupa serial number, checkbox berupa teks "A, B"
-const rowFor=r=>[serial(r.d)+0.4,r.email,r.name,r.id,r.loc,r.role=="s"?"sender":"recipient",r.sn,r.cond,r.rem,"drive-link",r.eq.length?"Yes":"No",r.eq.join(", "),r.eq.length?"drive-link":"",serial(r.d),r.ship,r.trk?Number(r.trk):""];
+const rowFor=r=>[serial(r.d)+0.4,r.email,r.name,r.id,r.loc,r.role=="s"?"sender":"recipient",r.sn,r.cond,r.rem,"drive-link",r.eq.length?"Yes":"No",r.eq.join(", "),r.eq.length?"drive-link":"",serial(r.d),r.ship,r.trk?Number(r.trk):"",r.dest];
 const VALUES=[HEAD,...sample.map(rowFor)];
 
 const res=()=>({headers:{},statusCode:200,body:null,setHeader(k,v){this.headers[k]=v},status(c){this.statusCode=c;return this},json(b){this.body=b;return this}});

@@ -31,8 +31,8 @@ export function missingColumns(rows,headers){
 }
 
 export function parseRows(rows){
-  return rows.map(o=>({d:toIso(get(o,"date")),email:get(o,"email")||"",name:String(get(o,"name")||""),id:get(o,"id")||"",loc:String(get(o,"loc")||""),
-    role:/^s/i.test(String(get(o,"role")||""))?"s":"r",sn:String(get(o,"sn")||""),
+  return rows.map(o=>{const role=/^s/i.test(String(get(o,"role")||""))?"s":"r";return ({d:toIso(get(o,"date")),email:get(o,"email")||"",name:String(get(o,"name")||""),id:get(o,"id")||"",loc:String(get(o,"loc")||""),
+    role,sn:String(get(o,"sn")||""),
     cond:/broken|rusak/i.test(String(get(o,"cond")||""))?"broken":"good",
-    rem:String(get(o,"rem")||""),ship:String(get(o,"ship")||""),trk:String(get(o,"trk")||""),eq:parseEquipment(get(o,"eq"),get(o,"eqInc"))})).filter(r=>r.sn&&r.d);
+    rem:String(get(o,"rem")||""),ship:String(get(o,"ship")||""),trk:String(get(o,"trk")||""),dest:role==="s"?String(get(o,"dest")||"").trim():"",eq:parseEquipment(get(o,"eq"),get(o,"eqInc"))})}).filter(r=>r.sn&&r.d);
 }

@@ -23,7 +23,7 @@ function stop(r,prev,last,i,check){
   const gap=prev?`<small>+${diff(prev.d,r.d)} day${diff(prev.d,r.d)===1?"":"s"}</small>`:"";
   const eq=r.eq&&r.eq.length?`<div class="eqrow">${chips(r.eq)}</div>`:"";
   const warn=check&&!check.ok?`<div class="eqwarn">${checkText(check)}</div>`:"";
-  return `<li class="${r.role}${last?" last":""}" style="--i:${i}"><span class="dot"></span><div class="tx"><b>${esc(cap(r.name))}</b><span>${r.role=="s"?"sent":"received"}, ${esc(cap(r.loc))}</span>${eq}${warn}</div><time>${fmt(r.d)}${gap}</time></li>`;
+  return `<li class="${r.role}${last?" last":""}" style="--i:${i}"><span class="dot"></span><div class="tx"><b>${esc(cap(r.name))}</b><span>${r.role=="s"?"sent":"received"}, ${esc(cap(r.loc))}${r.role=="s"&&r.dest?" &rarr; "+esc(cap(r.dest)):""}</span>${eq}${warn}</div><time>${fmt(r.d)}${gap}</time></li>`;
 }
 
 // Baris garis waktu dari indeks `from` sampai akhir. `max` membatasi nomor animasi supaya daftar panjang tidak menunggu lama.
@@ -35,7 +35,7 @@ function cardHtml([sn,l],ref,n){
   const checks=handoverChecks(l),last=checks[l.length-1];
   const more=l.length>KEEP,open=more&&state.open.has(sn);
   const pill=bad?"Broken":ship?"In transit":"With PIC";
-  const line=ship?`Sent from ${esc(cap(c.loc))}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}`:`${esc(cap(c.loc))}, since ${fmt(c.d)}`;
+  const line=ship?`Sent from ${esc(cap(c.loc))}${c.dest?` to <span class="to">${esc(cap(c.dest))}</span>`:", destination not set"}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}`:`${esc(cap(c.loc))}, since ${fmt(c.d)}`;
   const recent=`<ol class="tl recent">${items(l,checks,Math.max(0,l.length-KEEP),KEEP)}</ol>`;
   const full=more?`<div class="tlscroll" tabindex="0" role="region" aria-label="Full history of ${esc(sn)}"><ol class="tl">${items(l,checks,0,8)}</ol></div>`:"";
   const foot=`<div class="foot"><button class="mini" type="button" data-loc aria-pressed="${state.focus===sn}">${state.focus===sn?"Clear map focus":"Show on map"}</button>${more?`<button class="mini ghost" type="button" data-more data-n="${l.length}" aria-expanded="${open}">${open?"Hide history":`All ${l.length} records`}</button>`:""}</div>`;

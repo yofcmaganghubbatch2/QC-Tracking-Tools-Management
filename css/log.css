@@ -17,3 +17,5 @@ footer{margin-top:26px;color:var(--mute);font-size:.88rem}
 .c-eq .eqwarn,.c-eq .eqok{flex-basis:100%;margin-top:2px;font-size:.78rem;font-weight:500}
 .c-eq .eqwarn span{display:block}
 .c-eq .eqok{color:var(--teal)}
+.c-loc .dest{color:var(--amber-ink);font-weight:600}
+.c-loc .dest.none{color:var(--mute);font-weight:400}

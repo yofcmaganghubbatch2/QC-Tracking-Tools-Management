@@ -9,7 +9,7 @@ let TIPS=[];
 export const getTip=i=>TIPS[i];
 
 const FULL=[-10,-10,940,360];   // seluruh Indonesia
-const CENTER=[470,150];          // alat yang sedang dikirim "menunjuk" ke arah sini (tujuan belum diketahui)
+const CENTER=[470,150];          // alat yang sedang dikirim "menunjuk" ke arah sini kalau tujuannya kosong atau kotanya belum ada di peta
 const ARC_LEN=95;
 const PX=1.15;                  // di HP: piksel layar per satuan peta (tulisan peta jadi terbaca; peta digeser dengan jari)
 let ZOOM=PX;                    // tombol + / - mengubah ini (0.8 sampai 2.4)
@@ -26,7 +26,7 @@ export function initMapZoom(redraw){
 function tipHtml(gr){
   const c=gr.c,ship=c.role=="s";
   const status=ship
-    ?`<p class="go">Sent ${fmt(c.d)}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}. Waiting for the recipient to confirm.</p>`
+    ?`<p class="go">Sent ${fmt(c.d)} from ${esc(cap(c.loc))}${c.dest?` to <strong>${esc(cap(c.dest))}</strong>`:""}${c.ship?" via "+esc(c.ship):""}${c.trk?", tracking "+esc(c.trk):""}. ${c.dest?"":"Destination not set. "}Waiting for the recipient to confirm.</p>`
     :`<p>Holding since ${fmt(c.d)}</p>`;
   const items=gr.items.map(i=>`<li>${ITEM}<br><strong>${esc(i.sn)}</strong>${i.c.eq&&i.c.eq.length?`<br><small>+ ${i.c.eq.map(esc).join(", ")}</small>`:""}${i.c.cond=="broken"?` <span class="bad">broken: ${esc(i.c.rem||"no remark")}</span>`:""}</li>`).join("");
   return `<b>${esc(cap(c.name))}</b><small>ID ${esc(c.id)}, ${esc(cap(c.loc))}</small>${status}<ul>${items}</ul>`;
@@ -37,12 +37,26 @@ function arcEnd(p){
   return {e:[p[0]+dx/L*ARC_LEN,p[1]+dy/L*ARC_LEN],nx:-dy/L,ny:dx/L};
 }
 
-// Rute hanya untuk alat yang masih dalam pengiriman: garis dari kota pengirim, berujung "awaiting recipient".
-function arcHtml(sn,p,ai){
-  const {e,nx,ny}=arcEnd(p),mx=(p[0]+e[0])/2+nx*28,my=(p[1]+e[1])/2+ny*28,b=(2.6+ai*.45).toFixed(2);
+// Rute hanya untuk alat yang masih dalam pengiriman.
+// Tujuan dikenali: busur dari kota pengirim ke kota tujuan (cincin putus-putus di kota tujuan).
+// Tujuan kosong atau kotanya belum ada di peta: busur pendek ke arah tengah peta dengan keterangan di ujungnya.
+function arcHtml(sn,p,ai,to){
+  const known=!!to.q,e=known?to.q:arcEnd(p).e,dx=e[0]-p[0],dy=e[1]-p[1],L=Math.hypot(dx,dy)||1;
+  let nx=-dy/L,ny=dx/L;if(known&&ny>0){nx=-nx;ny=-ny} // busur melengkung ke atas (utara)
+  const off=known?Math.min(60,L*.22)+ai*5:28,mx=(p[0]+e[0])/2+nx*off,my=(p[1]+e[1])/2+ny*off,b=(2.6+ai*.45).toFixed(2);
+  const lab=known?"":`<text class="cy" x="${e[0]}" y="${e[1]+20}" text-anchor="middle">${esc(to.label)}</text>`;
   return `<path id="a${ai}" class="arc" data-sns="${sn}" pathLength="1" style="--i:${ai}" d="M${p} Q${mx} ${my} ${e}"/>`
    +`<g data-sns="${sn}"><circle class="trav" r="3.6" style="fill:var(--amber);opacity:0"><set attributeName="opacity" to="1" begin="${b}s"/><animateMotion dur="2.8s" begin="${b}s" repeatCount="indefinite"><mpath href="#a${ai}"/></animateMotion></circle></g>`
-   +`<g data-sns="${sn}"><g class="endn" style="--i:${ai}"><circle cx="${e[0]}" cy="${e[1]}" r="6" style="fill:var(--panel);stroke:var(--amber);stroke-width:2;stroke-dasharray:3 3"/><text class="cy" x="${e[0]}" y="${e[1]+20}" text-anchor="middle">awaiting recipient</text></g></g>`;
+   +`<g data-sns="${sn}"><g class="endn" style="--i:${ai}"><circle cx="${e[0]}" cy="${e[1]}" r="${known?8:6}" style="fill:${known?"none":"var(--panel)"};stroke:var(--amber);stroke-width:2;stroke-dasharray:3 3"/>${lab}</g></g>`;
+}
+
+// Tujuan sebuah catatan pengirim: titik di peta kalau kotanya dikenal, kalau tidak keterangan teks.
+function destOf(c,p){
+  if(!c.dest)return {q:null,label:"destination not set"};
+  const k=cityKey(c.dest);
+  if(!k)return {q:null,label:"to "+cap(c.dest),unknown:c.dest};
+  const q=xy(CITY[k][0],CITY[k][1]);
+  return Math.hypot(q[0]-p[0],q[1]-p[1])>14?{q,k,label:cap(k)}:{q:null,label:"to "+cap(k)}; // kota tujuan = kota pengirim
 }
 
 function markerHtml(gr,p,t){
@@ -80,7 +94,12 @@ export function renderMap(g){
     const key=cityKey(gr.c.loc),n=seen[key]=(seen[key]||0)+1;
     const p=[gr.p[0],gr.p[1]+(n-1)*16]; // dua PIC di kota yang sama: geser sedikit
     pts.push(p);
-    if(gr.c.role=="s"){arcs.push(arcHtml(esc(gr.items[0].sn),p,arcs.length));pts.push(arcEnd(p).e)}
+    if(gr.c.role=="s"){
+      const to=destOf(gr.c,p);
+      if(to.k)cities.set(to.k,to.q);               // kota tujuan ikut digambar dan diberi nama
+      if(to.unknown)missing.add(to.unknown);        // tujuan yang belum ada di js/config/cities.js
+      arcs.push(arcHtml(esc(gr.items[0].sn),p,arcs.length,to));pts.push(to.q||arcEnd(p).e);
+    }
     TIPS.push(tipHtml(gr));
     mk.push(markerHtml(gr,p,TIPS.length-1));
   });

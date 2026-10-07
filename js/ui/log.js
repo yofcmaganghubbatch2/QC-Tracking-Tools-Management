@@ -22,7 +22,7 @@ const eqCell=(r,c)=>{
   return `<div class="c-eq${e.length||note?"":" none"}">${chips||"–"}${note}</div>`;
 };
 
-const rowHtml=(r,c)=>`<div class="row"><div class="c-date">${fmt(r.d)}</div><div class="c-pic"><b>${esc(cap(r.name))}</b><small>ID ${esc(r.id)}</small></div><div class="c-loc">${esc(cap(r.loc))}</div><div class="c-role"><span class="chip ${r.role}">${r.role=="s"?"Sender":"Recipient"}</span></div><div class="c-tool"><span class="sn">${esc(r.sn)}</span>${detail(r)}</div>${eqCell(r,c)}</div>`;
+const rowHtml=(r,c)=>`<div class="row"><div class="c-date">${fmt(r.d)}</div><div class="c-pic"><b>${esc(cap(r.name))}</b><small>ID ${esc(r.id)}</small></div><div class="c-loc">${esc(cap(r.loc))}${r.role=="s"?`<small class="dest${r.dest?"":" none"}">&rarr; ${r.dest?esc(cap(r.dest)):"not set"}</small>`:""}</div><div class="c-role"><span class="chip ${r.role}">${r.role=="s"?"Sender":"Recipient"}</span></div><div class="c-tool"><span class="sn">${esc(r.sn)}</span>${detail(r)}</div>${eqCell(r,c)}</div>`;
 
 // Keterangan filter yang sedang berlaku untuk log, misal "Tool OH3368068, City Denpasar".
 function filterText(){

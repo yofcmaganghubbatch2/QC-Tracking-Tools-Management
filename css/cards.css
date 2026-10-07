@@ -60,3 +60,4 @@
 .tlscroll .tl li::before{animation-delay:calc(var(--i)*.05s)}
 .tlscroll .tl .dot::after{animation-delay:calc(var(--i)*.05s + .1s)}
 .card.xp{cursor:pointer}
+.to{font-weight:700;color:var(--ink)}

@@ -30,7 +30,7 @@ test("filter City: kartu = alat yang SEKARANG di kota itu, log = riwayat semua c
   pick("#citysel",k);
   assert.deepEqual(serials(),inCity.slice(0,4));
   assert.equal(rows(),Math.min(hist.length,10));
-  assert.equal(count(d.el("#log").innerHTML,new RegExp(`<div class="c-loc">${k[0].toUpperCase()+k.slice(1)}</div>`,"gi")),rows(),"semua baris log berlokasi di kota itu");
+  assert.equal(count(d.el("#log").innerHTML,new RegExp(`<div class="c-loc">${k[0].toUpperCase()+k.slice(1)}(?:<small|</div>)`,"gi")),rows(),"semua baris log berlokasi di kota itu");
   assert.match(d.el("#logsum").textContent,new RegExp(`History for: City ${k}`,"i"));assert.equal(d.el("#logsum").hidden,false);
   reset();assert.equal(d.el("#logsum").hidden,true);
 });
