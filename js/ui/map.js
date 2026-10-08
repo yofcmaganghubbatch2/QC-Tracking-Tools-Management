@@ -4,9 +4,15 @@ import {cityKey,ll,xy} from "../logic/geo.js";
 import {LAND} from "../config/land.js";
 import {CITY,LEFT} from "../config/cities.js";
 import {ITEM} from "../config/schema.js";
+import {shownSerials} from "./filters.js";
 
-let TIPS=[];
-export const getTip=i=>TIPS[i];
+let GROUPS=[];
+// Isi kartu info dibuat saat dibuka, hanya dari alat yang sedang ditampilkan (lolos filter dan, kalau ada, alat yang difokuskan).
+// Penanda yang diredupkan (tidak ada alat yang cocok) tetap menampilkan seluruh isinya sebagai konteks.
+export const getTip=i=>{
+  const gr=GROUPS[i],shown=shownSerials(),items=gr.items.filter(x=>shown.has(x.sn));
+  return tipHtml(items.length?{...gr,c:items[0].c,items}:gr);
+};
 
 const FULL=[-10,-10,940,360];   // seluruh Indonesia
 const CENTER=[470,150];          // alat yang sedang dikirim "menunjuk" ke arah sini kalau tujuannya kosong atau kotanya belum ada di peta
@@ -68,9 +74,9 @@ function destOf(c,p){
 
 function markerHtml(gr,p,t){
   const c=gr.c,m=gr.items.length,sns=gr.items.map(i=>esc(i.sn)).join(" ");
-  const bad=gr.items.some(i=>i.c.cond=="broken");
-  const col=bad?"var(--red)":c.role=="s"?"var(--amber)":"var(--teal)";
-  return `<g class="mk" tabindex="0" data-t="${t}" data-sns="${sns}" transform="translate(${p[0]} ${p[1]})"><circle r="15" style="fill:transparent"/><g class="mkin" style="--n:${t}"><circle class="ring" r="7" style="fill:${col}"/><circle r="${m>1?8:5.5}" style="fill:${col};stroke:var(--panel);stroke-width:2"/>${m>1?`<text class="cnt" y="3.5">${m}</text>`:""}</g></g>`;
+  const badSns=gr.items.filter(i=>i.c.cond=="broken").map(i=>esc(i.sn)).join(" "),base=c.role=="s"?"var(--amber)":"var(--teal)";
+  const col=badSns?"var(--red)":base;
+  return `<g class="mk" tabindex="0" data-t="${t}" data-sns="${sns}" data-bad="${badSns}" data-base="${base}" transform="translate(${p[0]} ${p[1]})"><circle r="15" style="fill:transparent"/><g class="mkin" style="--n:${t}"><circle class="ring" r="7" style="fill:${col}"/><circle class="dot" r="${m>1?8:5.5}" style="fill:${col};stroke:var(--panel);stroke-width:2"/>${m>1?`<text class="cnt" y="3.5">${m}</text>`:""}</g></g>`;
 }
 
 // Di layar sempit, peta di-zoom ke area yang ada alatnya supaya tulisan tetap terbaca.
@@ -86,7 +92,7 @@ function viewBox(pts){
 
 export function renderMap(g){
   const groups={},cities=new Map(),seen={},arcs=[],mk=[],missing=new Set(),pts=[];
-  TIPS=[];
+  GROUPS=[];
 
   g.forEach(([sn,l])=>{
     l.forEach(r=>{const k=cityKey(r.loc);if(k)cities.set(k,xy(CITY[k][0],CITY[k][1]))});
@@ -114,8 +120,8 @@ export function renderMap(g){
         arcs.push(arcHtml(sns.map(esc).join(" "),p,arcs.length,to));pts.push(to.q||arcEnd(p).e);
       });
     }
-    TIPS.push(tipHtml(gr));
-    mk.push(markerHtml(gr,p,TIPS.length-1));
+    GROUPS.push(gr);
+    mk.push(markerHtml(gr,p,GROUPS.length-1));
   });
 
   const vb=viewBox(pts),nar=isNarrow(),box=$("#map"),cw=Number(box.clientWidth)||360,ch=Number(box.clientHeight)||320;

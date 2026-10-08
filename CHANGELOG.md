@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.6.1
+- Perbaikan bug: saat filter dipakai atau "Show on map" diklik, kartu info titik peta masih menampilkan semua alat di titik itu. Sekarang kartu dibuat saat dibuka dan hanya memuat alat yang sedang ditampilkan (lolos filter, dan kalau ada yang difokuskan, hanya alat itu). Angka di titik dan warnanya (merah kalau ada yang rusak) ikut menyesuaikan, misal "5" menjadi satu titik biasa saat satu alat difokuskan
+- Kartu yang sedang di-pin otomatis tertutup saat filter berubah, dan hover berikutnya tetap berfungsi
+- 89 tes otomatis
+
 ## 3.6.0
 - Peta: alat yang dikirim dari kota yang sama digabung jadi satu titik berangka (sebelumnya satu titik per alat yang saling menumpuk). Busur digambar satu per tujuan berbeda: alat dengan tujuan sama berbagi satu busur, dan semua yang tujuannya kosong berbagi satu busur pendek "destination not set" (sebelumnya tulisan ini bertumpuk lima kali)
 - Kartu info titik peta memuat daftar semua alatnya di area yang bisa di-scroll: nomor seri, tujuan, pengirim dan tanggal kirim, ekspedisi dan resi, alat pendukung, dan status rusak. Judulnya "In transit from Jakarta" dengan jumlah alat

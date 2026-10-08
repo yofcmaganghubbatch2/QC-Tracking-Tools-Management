@@ -2,6 +2,7 @@ import {$} from "../dom.js";
 import {getTip} from "./map.js";
 
 let pinned=false,timer=null;
+const isPinned=()=>pinned&&!$("#tip").hidden; // kartu bisa ditutup dari luar (filter berubah), jadi status pin ikut dicek
 
 export function showTip(m,pin=false){
   const t=$("#tip"),w=$(".mapwrap").getBoundingClientRect(),r=m.getBoundingClientRect();
@@ -13,16 +14,16 @@ export function showTip(m,pin=false){
 const cancel=()=>{clearTimeout(timer);timer=null};
 export function hideTip(){cancel();pinned=false;const t=$("#tip");t.classList.remove("pinned");t.hidden=true}
 // Menutup agak tertunda supaya kursor sempat berpindah dari penanda ke kartu (untuk men-scroll daftar alat).
-const later=()=>{if(pinned)return;cancel();timer=setTimeout(()=>{if(!pinned)hideTip()},220)};
+const later=()=>{if(isPinned())return;cancel();timer=setTimeout(()=>{if(!isPinned())hideTip()},220)};
 
 // Hover atau fokus = kartu muncul sementara. Klik (atau Enter) = kartu "di-pin": tetap terbuka dan bisa di-scroll,
 // tutup dengan tombol x, klik di luar, atau Esc.
 export function initTooltip(){
   const mp=$("#map"),tip=$("#tip");
   const pin=m=>{cancel();pinned=true;showTip(m,true)};
-  mp.addEventListener("pointerover",e=>{const m=e.target.closest(".mk");if(m){cancel();if(!pinned)showTip(m)}});
+  mp.addEventListener("pointerover",e=>{const m=e.target.closest(".mk");if(m){cancel();if(!isPinned())showTip(m)}});
   mp.addEventListener("pointerout",e=>{if(e.target.closest(".mk"))later()});
-  mp.addEventListener("focusin",e=>{const m=e.target.closest(".mk");if(m){cancel();if(!pinned)showTip(m)}});
+  mp.addEventListener("focusin",e=>{const m=e.target.closest(".mk");if(m){cancel();if(!isPinned())showTip(m)}});
   mp.addEventListener("focusout",later);
   mp.addEventListener("click",e=>{const m=e.target.closest(".mk");m?pin(m):hideTip()});
   mp.addEventListener("keydown",e=>{const m=e.target.closest&&e.target.closest(".mk");if(m&&(e.key=="Enter"||e.key==" ")){e.preventDefault();pin(m)}});

@@ -31,3 +31,33 @@ test("kartu info alat yang dipegang PIC tetap memuat nama PIC dan alatnya",()=>{
   const tip=[0,1].map(getTip).find(t=>/Holding since/.test(t));
   assert.match(tip,/Hazle/);assert.match(tip,/<strong>OH3368075<\/strong>/);assert.match(tip,/class="tipscroll"/);
 });
+
+// ---- tooltip mengikuti filter dan fokus ("Show on map") ----
+const {pick}=await import("../js/ui/filters.js");
+const transit=()=>[0,1].map(getTip).find(t=>/In transit from/.test(t));
+const lis=t=>count(t,/<li>/g);
+test("tanpa filter: kartu info titik memuat semua 5 alat",()=>{assert.equal(lis(transit()),5)});
+test("filter Tool: kartu info hanya memuat alat itu (bukan 5), dengan kalimat tunggal",()=>{
+  d.el("#snsel").onchange({target:{value:"OH3365868"}});
+  const t=transit();
+  assert.equal(lis(t),1);assert.ok(t.includes("<strong>OH3365868</strong>"));assert.ok(!t.includes("OH3365869"));
+  assert.match(t,/1 Ultrasonic Thickness Gauge</);assert.match(t,/Waiting for the recipient to confirm/);assert.match(t,/&rarr; Medan/);
+  d.el("#freset").onclick();
+  assert.equal(lis(transit()),5,"setelah Reset kembali 5");
+});
+test("Show on map (fokus) pada 1 alat: kartu info hanya memuat alat itu; klik lagi mengembalikan semua",()=>{
+  pick("LE:2961864");
+  const t=transit();assert.equal(lis(t),1);assert.ok(t.includes("<strong>LE:2961864</strong>"));assert.match(t,/&rarr; Atlantis/);
+  pick("LE:2961864");
+  assert.equal(lis(transit()),5);
+});
+test("fokus pada alat di kota lain: titik yang diredupkan tetap menampilkan isi lengkap sebagai konteks",()=>{
+  pick("OH3368075"); // alat yang sudah sampai di Bandung
+  assert.equal(lis(transit()),5,"titik Jakarta redup, isinya tetap lengkap");
+  const held=[0,1].map(getTip).find(t=>/Holding since/.test(t));assert.equal(lis(held),1);
+  pick("OH3368075");
+});
+test("filter City yang tidak cocok dengan titik: titik redup, isi lengkap",()=>{
+  d.el("#citysel").onchange({target:{value:"bandung"}});
+  assert.equal(lis(transit()),5);d.el("#freset").onclick();
+});

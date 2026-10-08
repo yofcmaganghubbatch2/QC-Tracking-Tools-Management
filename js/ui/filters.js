@@ -26,10 +26,26 @@ export function fillFilters(g){
 
 export const visibleSerials=()=>allowedSerials(state.g,state);
 
-// Sorot di peta: tanda yang bukan milik alat yang lolos filter (dan alat yang disorot) diredupkan. Kartu yang disorot diberi cincin.
-export function applyMapFilter(){
+// Alat yang sedang ditampilkan di peta: yang lolos filter gabungan; kalau ada alat yang difokuskan ("Show on map"), hanya alat itu.
+export function shownSerials(){
   const allowed=visibleSerials(),f=state.focus&&allowed.has(state.focus)?state.focus:null;
-  $$(".mapbox [data-sns]").forEach(e=>e.classList.toggle("dim",!e.dataset.sns.split(" ").some(s=>allowed.has(s)&&(!f||s===f))));
+  return f?new Set([f]):allowed;
+}
+
+// Sorot di peta: penanda yang tidak punya alat yang ditampilkan diredupkan. Penanda berisi banyak alat menyesuaikan angka dan
+// warnanya dengan alat yang ditampilkan (misal "5" jadi tanpa angka saat satu alat difokuskan). Kartu yang difokuskan diberi cincin.
+export function applyMapFilter(){
+  const shown=shownSerials(),f=state.focus&&visibleSerials().has(state.focus)?state.focus:null;
+  const has=sns=>sns.split(" ").some(s=>shown.has(s));
+  $$(".mapbox [data-sns]").forEach(e=>e.classList.toggle("dim",!has(e.dataset.sns)));
+  $$(".mapbox .mk").forEach(m=>{
+    const all=m.dataset.sns.split(" "),on=all.filter(s=>shown.has(s)),n=on.length||all.length,use=on.length?on:all;
+    const bad=(m.dataset.bad||"").split(" ").filter(Boolean).some(s=>use.includes(s)),col=bad?"var(--red)":m.dataset.base;
+    const cnt=m.querySelector(".cnt"),dot=m.querySelector(".dot"),ring=m.querySelector(".ring");
+    if(cnt)cnt.textContent=n>1?n:"";
+    if(dot){dot.setAttribute("r",n>1?8:5.5);dot.style.fill=col}
+    if(ring)ring.style.fill=col;
+  });
   $$(".card").forEach(c=>{
     const on=!!f&&c.dataset.sn==f;c.classList.toggle("sel",on);
     const b=c.querySelector("[data-loc]");if(b){b.textContent=on?"Clear map focus":"Show on map";b.setAttribute("aria-pressed",on)}
